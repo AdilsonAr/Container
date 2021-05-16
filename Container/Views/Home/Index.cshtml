@@ -2,4 +2,37 @@
     ViewBag.Title = "Home Page";
 }
 
-Index
+<div id="content">
+</div>
+<script>
+    function loadDirect(info) {
+            $('#content').html(info)
+        }
+
+    function loadPage(page) {
+    $('#content').hide()
+    $.ajax({
+        url: '/Home/' + page,
+        contentType: 'application/html; charset=utf-8',
+        type: 'GET',
+        dataType: 'html'
+    })
+        .done(function (result) {
+            $('#content').html(result)
+            $('#content').show()
+        })
+        .fail(function () {
+            $('#content').show()
+            swal({
+                title: "Error al cargar la página",
+                text: "No se pudo completar la carga del sitio",
+                icon: "error",
+                button: "Ok"
+            })
+        })
+}
+
+    $(document).ready(function () {
+        loadPage("IndexParcial")
+        })
+</script>

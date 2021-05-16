@@ -65,3 +65,9 @@ C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csproj.CoreComp
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csproj.CopyComplete
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.dll
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.pdb
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.Core.dll
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.S3.dll
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.Core.pdb
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.Core.xml
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.S3.pdb
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.S3.xml
