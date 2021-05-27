@@ -1,8 +1,9 @@
 create database Container;
 use Container;
 
---use master
---drop database Container
+use master
+drop database Container
+
 create table usuario(
 id_usuario int identity,
 nombres varchar(50),
@@ -44,7 +45,7 @@ peso_Mb decimal,
 tipo varchar(10)
 );
 alter table archivo_s3 add constraint pk_archivo_s3 primary key(id_archivo)
-alter table archivo_s3 add constraint fk_archivo_s3_usuario foreign key(id_usuario_creador) references usuario(id_usuario)
+alter table archivo_s3 add constraint fk_archivo_s3_usuario foreign key(id_autor) references usuario(id_usuario)
 on delete no action on update no action
 create table avatar_s3(
 id_avatar int identity,
@@ -76,10 +77,13 @@ create table comentario(
 id_comentario int identity,
 id_referencia int,
 fecha date,
-contenido text
+contenido text,
+id_usuario int
 );
 alter table comentario add constraint pk_comentario primary key(id_comentario)
 alter table comentario add constraint fk_comentario_referencia foreign key(id_referencia) references referencia(id_referencia)
+on delete no action on update no action
+alter table comentario add constraint fk_comentario_usuario foreign key(id_usuario) references usuario(id_usuario)
 on delete no action on update no action
 
 create table link(
@@ -93,5 +97,5 @@ alter table link add constraint pk_link primary key(id_link)
 alter table link add constraint fk_link_referencia foreign key(id_referencia) references referencia(id_referencia)
 on delete no action on update no action
 
-alter table link add constraint fk_comentario_usuario foreign key(id_usuario_creador) references usuario(id_usuario)
+alter table link add constraint fk_link_usuario foreign key(id_usuario_creador) references usuario(id_usuario)
 on delete no action on update no action

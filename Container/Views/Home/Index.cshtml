@@ -12,7 +12,7 @@
     function loadPage(page) {
     $('#content').hide()
     $.ajax({
-        url: '/Home/' + page,
+        url: page,
         contentType: 'application/html; charset=utf-8',
         type: 'GET',
         dataType: 'html'
@@ -33,6 +33,6 @@
 }
 
     $(document).ready(function () {
-        loadPage("IndexParcial")
+        loadPage("/Home/IndexParcial")
         })
 </script>
