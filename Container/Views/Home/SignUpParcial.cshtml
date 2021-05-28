@@ -1,0 +1,100 @@
+﻿@model Container.Dto.usuarioDto
+
+@{
+    Layout = null;
+    ViewBag.Title = "Signup";
+}
+
+<h2>Registrarse</h2>
+
+@using (Html.BeginForm("SignUpParcial", "Home", FormMethod.Post, htmlAttributes: new { id = "frmSignUp", @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Ingrese sus datos para el Registro</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.nombres, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.nombres, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.nombres, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.apellidos, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.usuario1, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.usuario1, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.usuario1, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.clave, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.PasswordFor(model => model.clave, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.clave, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.clave2, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.PasswordFor(model => model.clave2, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.clave2, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div id="signUpSub" class="btn btn-danger">Crear Registro</div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label> @ViewBag.Notification</label>
+        </div>
+    </div>
+</div>
+}
+<script type="text/javascript">
+    $("#signUpSub").on("click", function () {
+    var datos = $("#frmSignUp")
+                $.ajax({
+                    type: 'post',
+                    data: datos.serialize(),
+                    url: '@Url.Action("SignUpParcial", "Home")'
+                }).done(function (respuesta, textStatus, xhr) {
+                    
+                    location.href="/Home/Container"
+    
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    loadDirect(jqXHR.responseText)
+                    swal({
+                        title: "Error al cargar la página",
+                        text: "La operacion no se pudo realizar",
+                        icon: "error",
+                        button: "Ok"
+                    })
+                })
+    })
+</script>

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ContainerModelStoreContainer" CdmEntityContainer="ContainerEntities">
+    <EntitySetMapping Name="archivo_s3">
+      <EntityTypeMapping TypeName="ContainerModel.archivo_s3">
+        <MappingFragment StoreEntitySet="archivo_s3">
+          <ScalarProperty Name="id_archivo" ColumnName="id_archivo" />
+          <ScalarProperty Name="nombre_archivo_app" ColumnName="nombre_archivo_app" />
+          <ScalarProperty Name="nombre_archivo_s3" ColumnName="nombre_archivo_s3" />
+          <ScalarProperty Name="nombre_bucket" ColumnName="nombre_bucket" />
+          <ScalarProperty Name="id_autor" ColumnName="id_autor" />
+          <ScalarProperty Name="clave_archivo" ColumnName="clave_archivo" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="peso_Mb" ColumnName="peso_Mb" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="avatar_s3">
+      <EntityTypeMapping TypeName="ContainerModel.avatar_s3">
+        <MappingFragment StoreEntitySet="avatar_s3">
+          <ScalarProperty Name="id_avatar" ColumnName="id_avatar" />
+          <ScalarProperty Name="nombre_avatar_app" ColumnName="nombre_avatar_app" />
+          <ScalarProperty Name="nombre_archivo_s3" ColumnName="nombre_archivo_s3" />
+          <ScalarProperty Name="nombre_bucket" ColumnName="nombre_bucket" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="comentario">
+      <EntityTypeMapping TypeName="ContainerModel.comentario">
+        <MappingFragment StoreEntitySet="comentario">
+          <ScalarProperty Name="id_comentario" ColumnName="id_comentario" />
+          <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="contenido" ColumnName="contenido" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="link">
+      <EntityTypeMapping TypeName="ContainerModel.link">
+        <MappingFragment StoreEntitySet="link">
+          <ScalarProperty Name="id_link" ColumnName="id_link" />
+          <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
+          <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="referencia">
+      <EntityTypeMapping TypeName="ContainerModel.referencia">
+        <MappingFragment StoreEntitySet="referencia">
+          <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
+          <ScalarProperty Name="id_repositorio" ColumnName="id_repositorio" />
+          <ScalarProperty Name="rama" ColumnName="rama" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
+          <ScalarProperty Name="id_archivo" ColumnName="id_archivo" />
+          <ScalarProperty Name="clave_archivo" ColumnName="clave_archivo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="repositorio">
+      <EntityTypeMapping TypeName="ContainerModel.repositorio">
+        <MappingFragment StoreEntitySet="repositorio">
+          <ScalarProperty Name="id_repositorio" ColumnName="id_repositorio" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="suscripcion">
+      <EntityTypeMapping TypeName="ContainerModel.suscripcion">
+        <MappingFragment StoreEntitySet="suscripcion">
+          <ScalarProperty Name="id_suscripcion" ColumnName="id_suscripcion" />
+          <ScalarProperty Name="nivel" ColumnName="nivel" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="id_repositorio" ColumnName="id_repositorio" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="ContainerModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuario">
+      <EntityTypeMapping TypeName="ContainerModel.usuario">
+        <MappingFragment StoreEntitySet="usuario">
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="nombres" ColumnName="nombres" />
+          <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+          <ScalarProperty Name="usuario1" ColumnName="usuario" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="nivel" ColumnName="nivel" />
+          <ScalarProperty Name="clave" ColumnName="clave" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -71,3 +71,7 @@ C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.Core.pdb
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.Core.xml
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.S3.pdb
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\AWSSDK.S3.xml
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.dll
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.SqlServer.dll
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.xml
+C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.SqlServer.xml

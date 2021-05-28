@@ -1,4 +1,70 @@
-﻿ @{
+﻿
+@model Container.Dto.loginDto
+
+@{
     Layout = null;
+    ViewBag.Title = "Login";
 }
-Login parcial
+
+<h2>Login</h2>
+
+
+@using (Html.BeginForm("LoginParcial", "Home", FormMethod.Post, htmlAttributes: new { id = "frmLogin", @class = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Ingresa con tus datos</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.usuario, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.usuario, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.usuario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.clave, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.clave, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.clave, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div id="loginSub" class="btn btn-danger">Entrar</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>@ViewBag.Notification</label>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $("#loginSub").on("click", function () {
+    var datos = $("#frmLogin")
+                $.ajax({
+                    type: 'post',
+                    data: datos.serialize(),
+                    url: '@Url.Action("LoginParcial", "Home")'
+                }).done(function (respuesta, textStatus, xhr) {  
+                    location.href="/Home/Container"
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                     loadDirect(jqXHR.responseText)
+                     swal({
+                        title: "Error al cargar la página",
+                        text: "La operacion no se pudo realizar",
+                        icon: "error",
+                        button: "Ok"
+                    })
+                    
+                })
+    })
+</script>

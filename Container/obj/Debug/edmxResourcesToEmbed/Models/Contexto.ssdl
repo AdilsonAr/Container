@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ContainerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="archivo_s3">
+    <Key>
+      <PropertyRef Name="id_archivo" />
+    </Key>
+    <Property Name="id_archivo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_archivo_app" Type="varchar" MaxLength="50" />
+    <Property Name="nombre_archivo_s3" Type="varchar" MaxLength="50" />
+    <Property Name="nombre_bucket" Type="varchar" MaxLength="50" />
+    <Property Name="id_autor" Type="int" />
+    <Property Name="clave_archivo" Type="text" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="peso_Mb" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="tipo" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="avatar_s3">
+    <Key>
+      <PropertyRef Name="id_avatar" />
+    </Key>
+    <Property Name="id_avatar" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_avatar_app" Type="varchar" MaxLength="50" />
+    <Property Name="nombre_archivo_s3" Type="varchar" MaxLength="50" />
+    <Property Name="nombre_bucket" Type="varchar" MaxLength="50" />
+    <Property Name="id_usuario" Type="int" />
+  </EntityType>
+  <EntityType Name="comentario">
+    <Key>
+      <PropertyRef Name="id_comentario" />
+    </Key>
+    <Property Name="id_comentario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_referencia" Type="int" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="contenido" Type="text" />
+    <Property Name="id_usuario" Type="int" />
+  </EntityType>
+  <EntityType Name="link">
+    <Key>
+      <PropertyRef Name="id_link" />
+    </Key>
+    <Property Name="id_link" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_referencia" Type="int" />
+    <Property Name="id_usuario_creador" Type="int" />
+    <Property Name="tipo" Type="varchar" MaxLength="50" />
+    <Property Name="nombre" Type="text" />
+  </EntityType>
+  <EntityType Name="referencia">
+    <Key>
+      <PropertyRef Name="id_referencia" />
+    </Key>
+    <Property Name="id_referencia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_repositorio" Type="int" />
+    <Property Name="rama" Type="int" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="id_usuario_creador" Type="int" />
+    <Property Name="id_archivo" Type="int" />
+    <Property Name="clave_archivo" Type="text" />
+  </EntityType>
+  <EntityType Name="repositorio">
+    <Key>
+      <PropertyRef Name="id_repositorio" />
+    </Key>
+    <Property Name="id_repositorio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tipo" Type="varchar" MaxLength="50" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="suscripcion">
+    <Key>
+      <PropertyRef Name="id_suscripcion" />
+    </Key>
+    <Property Name="id_suscripcion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nivel" Type="varchar" MaxLength="50" />
+    <Property Name="id_usuario" Type="int" />
+    <Property Name="id_repositorio" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombres" Type="varchar" MaxLength="50" />
+    <Property Name="apellidos" Type="varchar" MaxLength="50" />
+    <Property Name="usuario" Type="varchar" MaxLength="50" />
+    <Property Name="correo" Type="varchar" MaxLength="50" />
+    <Property Name="nivel" Type="varchar" MaxLength="50" />
+    <Property Name="clave" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="fk_archivo_s3_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="archivo_s3" Type="Self.archivo_s3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="archivo_s3">
+        <PropertyRef Name="id_autor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_avatar_s3_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="avatar_s3" Type="Self.avatar_s3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="avatar_s3">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_comentario_referencia">
+    <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
+    <End Role="comentario" Type="Self.comentario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="referencia">
+        <PropertyRef Name="id_referencia" />
+      </Principal>
+      <Dependent Role="comentario">
+        <PropertyRef Name="id_referencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_comentario_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="comentario" Type="Self.comentario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="comentario">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_link_referencia">
+    <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
+    <End Role="link" Type="Self.link" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="referencia">
+        <PropertyRef Name="id_referencia" />
+      </Principal>
+      <Dependent Role="link">
+        <PropertyRef Name="id_referencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_link_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="link" Type="Self.link" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="link">
+        <PropertyRef Name="id_usuario_creador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_referencia_archivo">
+    <End Role="archivo_s3" Type="Self.archivo_s3" Multiplicity="0..1" />
+    <End Role="referencia" Type="Self.referencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="archivo_s3">
+        <PropertyRef Name="id_archivo" />
+      </Principal>
+      <Dependent Role="referencia">
+        <PropertyRef Name="id_archivo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_referencia_repositorio">
+    <End Role="repositorio" Type="Self.repositorio" Multiplicity="0..1" />
+    <End Role="referencia" Type="Self.referencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="repositorio">
+        <PropertyRef Name="id_repositorio" />
+      </Principal>
+      <Dependent Role="referencia">
+        <PropertyRef Name="id_repositorio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_referencia_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="referencia" Type="Self.referencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="referencia">
+        <PropertyRef Name="id_usuario_creador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_suscripcion_repositorio">
+    <End Role="repositorio" Type="Self.repositorio" Multiplicity="0..1" />
+    <End Role="suscripcion" Type="Self.suscripcion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="repositorio">
+        <PropertyRef Name="id_repositorio" />
+      </Principal>
+      <Dependent Role="suscripcion">
+        <PropertyRef Name="id_repositorio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_suscripcion_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="suscripcion" Type="Self.suscripcion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="suscripcion">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ContainerModelStoreContainer">
+    <EntitySet Name="archivo_s3" EntityType="Self.archivo_s3" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="avatar_s3" EntityType="Self.avatar_s3" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="comentario" EntityType="Self.comentario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="link" EntityType="Self.link" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="referencia" EntityType="Self.referencia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="repositorio" EntityType="Self.repositorio" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="suscripcion" EntityType="Self.suscripcion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="archivo_s3" EntitySet="archivo_s3" />
+    </AssociationSet>
+    <AssociationSet Name="fk_avatar_s3_usuario" Association="Self.fk_avatar_s3_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="avatar_s3" EntitySet="avatar_s3" />
+    </AssociationSet>
+    <AssociationSet Name="fk_comentario_referencia" Association="Self.fk_comentario_referencia">
+      <End Role="referencia" EntitySet="referencia" />
+      <End Role="comentario" EntitySet="comentario" />
+    </AssociationSet>
+    <AssociationSet Name="fk_comentario_usuario" Association="Self.fk_comentario_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="comentario" EntitySet="comentario" />
+    </AssociationSet>
+    <AssociationSet Name="fk_link_referencia" Association="Self.fk_link_referencia">
+      <End Role="referencia" EntitySet="referencia" />
+      <End Role="link" EntitySet="link" />
+    </AssociationSet>
+    <AssociationSet Name="fk_link_usuario" Association="Self.fk_link_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="link" EntitySet="link" />
+    </AssociationSet>
+    <AssociationSet Name="fk_referencia_archivo" Association="Self.fk_referencia_archivo">
+      <End Role="archivo_s3" EntitySet="archivo_s3" />
+      <End Role="referencia" EntitySet="referencia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_referencia_repositorio" Association="Self.fk_referencia_repositorio">
+      <End Role="repositorio" EntitySet="repositorio" />
+      <End Role="referencia" EntitySet="referencia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_referencia_usuario" Association="Self.fk_referencia_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="referencia" EntitySet="referencia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_suscripcion_repositorio" Association="Self.fk_suscripcion_repositorio">
+      <End Role="repositorio" EntitySet="repositorio" />
+      <End Role="suscripcion" EntitySet="suscripcion" />
+    </AssociationSet>
+    <AssociationSet Name="fk_suscripcion_usuario" Association="Self.fk_suscripcion_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="suscripcion" EntitySet="suscripcion" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
