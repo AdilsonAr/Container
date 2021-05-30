@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="table">
+    @foreach (Container.Dto.Archivo_s3_ResponseDto c in ViewBag.files)
+    {
+        <tr>
+            <td>
+                <div id="@c.id">
+                    @c.nombre
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+<button>
+    Nuevo
+</button>

@@ -60,7 +60,6 @@ C:\Users\KGB\Desktop\@WA\Container\Container\bin\es\System.Web.Razor.resources.d
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\es\System.Web.WebPages.resources.dll
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csprojAssemblyReference.cache
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csproj.CoreCompileInputs.cache
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csproj.CopyComplete
 C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.dll
@@ -75,3 +74,4 @@ C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.dll
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.SqlServer.dll
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.xml
 C:\Users\KGB\Desktop\@WA\Container\Container\bin\EntityFramework.SqlServer.xml
+C:\Users\KGB\Desktop\@WA\Container\Container\obj\Debug\Container.csproj.AssemblyReference.cache

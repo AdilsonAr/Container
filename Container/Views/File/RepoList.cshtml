@@ -1,0 +1,24 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="table">
+    @foreach (Container.Dto.RepoResponseDto c in ViewBag.repos)
+    {
+        <tr>
+            <td>
+                <div class="itemRepo" id="@c.id">
+                    @c.nombre
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+<button>
+    Nuevo
+</button>
+<script>
+    $(".itemRepo").on("click", function () {
+        loadPage("/File/FileList?id_repo=" +this.id, '#fileList')
+    })
+</script>

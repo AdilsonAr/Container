@@ -20,6 +20,10 @@
                     <li>
                         <button class="btn btn-light" id="logOut">LogOut</button>
                     </li>
+                    <li>
+                        <button class="btn btn-light" id="archivos">Mis archivos</button>
+                    </li>
+
                     <li><p style="color:brown;margin-top:15px">Hola @Session["usernameS"] </p></li>
                 }
                 else
@@ -56,7 +60,11 @@
     })
 
     $("#index").on("click", function () {
-    loadPage("/Home/IndexParcial")
+    location.href="/Home/Index"
+    })
+
+    $("#archivos").on("click", function () {
+    location.href="/Home/Container"
     })
 
     $("#logOut").on("click", function () {

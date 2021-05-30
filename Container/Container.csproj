@@ -135,7 +135,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Dto\Archivo_s3_ResponseDto.cs" />
     <Compile Include="Dto\loginDto.cs" />
+    <Compile Include="Dto\RepoResponseDto.cs" />
     <Compile Include="Dto\usuarioDto.cs" />
     <Compile Include="FileRepository\FileRepo.cs" />
     <Compile Include="Global.asax.cs">
@@ -344,10 +346,12 @@
     <Content Include="Views\Home\LoginParcial.cshtml" />
     <Content Include="Views\Home\SignUpParcial.cshtml" />
     <Content Include="Views\Home\Container.cshtml" />
+    <Content Include="Views\File\Files.cshtml" />
+    <Content Include="Views\File\RepoList.cshtml" />
+    <Content Include="Views\File\FileList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\File\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

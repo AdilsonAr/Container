@@ -49,13 +49,25 @@ namespace Container.Controllers
                 {
                     u.nivel = "principiante";
                     db.usuario.Add(usuarioDto.toModel(u));
+                    repositorio repo = new repositorio();
+                    repo.tipo = "personal";
+                    repo.nombre = u.usuario1;
+                    db.repositorio.Add(repo);
                     db.SaveChanges();
-                    usuario actual = db.usuario.Where(x => x.usuario1.Equals(u.usuario1)).First();
-                    Session["userIdS"] = actual.id_usuario.ToString();
+
+                    ContainerEntities db2 = new ContainerEntities();
+                    usuario actual = db2.usuario.Where(x => x.usuario1.Equals(u.usuario1)).First();
+                    repositorio repoactual = db2.repositorio.Where(x => x.nombre.Equals(actual.usuario1)).First();
+                    suscripcion sus = new suscripcion();
+                    sus.nivel = "admin";
+                    sus.id_usuario = actual.id_usuario;
+                    sus.id_repositorio = repoactual.id_repositorio;
+                    db2.suscripcion.Add(sus);
+                    db2.SaveChanges();
+                    Session["userIdS"] = actual.id_usuario;
                     Session["usernameS"] = actual.usuario1.ToString();
                     Response.StatusCode = 200;
                     return View();
-
                 }
             }
             else
@@ -86,7 +98,7 @@ namespace Container.Controllers
                 var login = db.usuario.Where(x => x.usuario1.Equals(dto.usuario) && x.clave.Equals(dto.clave)).FirstOrDefault();
                 if (login != null)
                 {
-                    Session["userIdS"] = login.id_usuario.ToString();
+                    Session["userIdS"] = login.id_usuario;
                     Session["usernameS"] = login.usuario1.ToString();
                     Response.StatusCode = 200;
                     return View();
