@@ -7,6 +7,7 @@ using Container.FileRepository;
 using System.Threading.Tasks;
 using Container.Models;
 using Container.Dto;
+using System.IO;
 
 namespace Container.Controllers
 {
@@ -18,6 +19,14 @@ namespace Container.Controllers
             FileRepo repo = new FileRepo();
             string s = await repo.testListBucketsAsync();
             return Json(s, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UploadFile(HttpPostedFileBase file)
+        {
+            FileRepo repo = new FileRepo();
+            bool r= await repo.upload(file, Path.Combine(Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName)));
+            return Json(r);
         }
 
         // GET: File
@@ -66,6 +75,8 @@ namespace Container.Controllers
                             archDto.Add(arch);
                         }
                         ViewBag.files = archDto;
+                        ViewBag.repo = id_repo;
+                        ViewBag.repoName = repo.nombre;
                     }
                 }
             }
@@ -96,76 +107,5 @@ namespace Container.Controllers
             return View();
         }
 
-        // GET: File/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: File/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: File/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: File/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: File/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: File/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: File/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
