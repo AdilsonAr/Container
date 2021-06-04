@@ -179,9 +179,6 @@
     <Compile Include="Models\suscripcion.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>Contexto.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\usuario.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
@@ -200,8 +197,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\Contexto.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Contexto.Context.cs</LastGenOutput>
       <DependentUpon>Contexto.edmx</DependentUpon>
+      <LastGenOutput>Contexto.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\Contexto.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

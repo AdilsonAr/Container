@@ -32,7 +32,6 @@ namespace Container.Models
         public virtual DbSet<referencia> referencia { get; set; }
         public virtual DbSet<repositorio> repositorio { get; set; }
         public virtual DbSet<suscripcion> suscripcion { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
     }
 }

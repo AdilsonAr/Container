@@ -58,6 +58,7 @@
             $('#errMessage').hide()
             $('#progressBar').show()
             fileuploaddata = new FormData($('#frmFile')[0])
+            fileuploaddata.append('repo_id',@ViewBag.repo)
             $.ajax({
                 xhr: function () {
                     var xhr = new window.XMLHttpRequest();
@@ -79,16 +80,27 @@
                 processData: false,
                 contentType: false,
                 dataType: "json"
-            }).done(function () {
-                $('#UploadModal').modal('hide')
-                swal({
-                    title: "Completado",
-                    text: "La operacion ha sido completada",
-                    icon: "success",
-                    button: "Ok"
-                })
-            }).fail(function () {
-
+            }).done(function (response) {
+                if (response == true) {
+                    $('#UploadModal').modal('hide')
+                    swal({
+                        title: "Completado",
+                        text: "La operacion ha sido completada",
+                        icon: "success",
+                        button: "Ok"
+                    })
+                } else {
+                    $('#UploadModal').modal('hide')
+                    swal({
+                        title: "Error al procesar el archivo",
+                        text: "La operacion no se pudo realizar",
+                        icon: "error",
+                        button: "Ok"
+                    })
+                }
+                
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText)
                 swal({
                     title: "Error al cargar la página",
                     text: "La operacion no se pudo realizar",

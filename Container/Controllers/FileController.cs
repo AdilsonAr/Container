@@ -12,98 +12,148 @@ using System.IO;
 namespace Container.Controllers
 {
     public class FileController : Controller
-    {
-        ContainerEntities db = new ContainerEntities();
+    {        
+        FileRepo repo = new FileRepo();
+        string bucket = "ar-container-bucket";
+
         public async Task<JsonResult> Test()
-        {
-            FileRepo repo = new FileRepo();
+        {            
             string s = await repo.testListBucketsAsync();
             return Json(s, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<JsonResult> UploadFile(HttpPostedFileBase file)
+        public async Task<JsonResult> UploadFile(HttpPostedFileBase file, int repo_id)
         {
-            FileRepo repo = new FileRepo();
-            bool r= await repo.upload(file, Path.Combine(Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName)));
-            return Json(r);
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { 
+                Response.StatusCode = 401;
+                return Json(false);
+            }
+            else
+            {
+                int usuario_id = (int)System.Web.HttpContext.Current.Session["userIdS"];
+                string nombre = Guid.NewGuid().ToString();
+                bool r = await repo.upload(file, 
+                    Path.Combine(Server.MapPath("~/Uploads"), Path.GetFileName(file.FileName)), 
+                    bucket,
+                    nombre);
+                if (r)
+                {
+                    archivo_s3 ar = new archivo_s3();
+                    ar.nombre_archivo_app = file.FileName;
+                    ar.nombre_archivo_s3 = nombre;
+                    ar.id_autor = usuario_id;
+                    ar.nombre_bucket = bucket;
+                    ar.fecha = new DateTime();
+                    ar.peso_Mb = file.ContentLength / (1024*1024);
+                    ar.tipo = file.ContentType;
+                    ar.clave_archivo = Guid.NewGuid().ToString();
+
+                    ContainerEntities db = new ContainerEntities();
+                    db.archivo_s3.Add(ar);
+                    db.SaveChanges();
+
+                    ContainerEntities db2 = new ContainerEntities();
+                    archivo_s3 ar2 = db2.archivo_s3.Where(x => x.clave_archivo.Equals(ar.clave_archivo)
+                      && x.nombre_archivo_s3.Equals(ar.nombre_archivo_s3)).First();
+                    referencia refer = new referencia();
+                    refer.id_archivo = ar2.id_archivo;
+                    refer.id_repositorio = repo_id;
+                    refer.id_usuario_creador = usuario_id;
+                    refer.rama = 1;
+                    refer.fecha = new DateTime();
+                    refer.clave_archivo = ar.clave_archivo;
+                    db2.referencia.Add(refer);
+                    db2.SaveChanges();
+                }
+                return Json(r);
+            }
+            
         }
 
         // GET: File
         public ActionResult Files()
         {
-            string nombreUsuario = System.Web.HttpContext.Current.Session["usernameS"].ToString();
-            if (nombreUsuario == null)
-            {
-                Response.StatusCode = 401;
-            }
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) {Response.StatusCode = 401;}
             return View();
         }
 
         public ActionResult FileList(int id_repo)
         {
-            int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
-            string nombreUsuario = System.Web.HttpContext.Current.Session["usernameS"].ToString();
-            if (nombreUsuario == null)
-            {
-                Response.StatusCode = 401;
-            }
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { Response.StatusCode = 401; }
             else
             {
-                repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).First();
-                if (repo == null)
+                int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
+                string nombreUsuario = System.Web.HttpContext.Current.Session["usernameS"].ToString();
+                if (nombreUsuario == null)
                 {
-                    Response.StatusCode = 400;
+                    Response.StatusCode = 401;
                 }
                 else
                 {
-                    suscripcion sus = db.suscripcion.Where(x => x.id_repositorio == id_repo
-                      && x.id_usuario == idUsuario).First();
-                    if (sus == null)
+                    ContainerEntities db = new ContainerEntities();
+                    repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).First();
+                    if (repo == null)
                     {
-                        Response.StatusCode = 401;
+                        Response.StatusCode = 400;
                     }
                     else
                     {
-                        List<Archivo_s3_ResponseDto> archDto = new List<Archivo_s3_ResponseDto>();
-                        List <referencia> refer = repo.referencia.ToList();
-                        foreach(referencia c in refer)
+                        suscripcion sus = db.suscripcion.Where(x => x.id_repositorio == id_repo
+                          && x.id_usuario == idUsuario).First();
+                        if (sus == null)
                         {
-                            Archivo_s3_ResponseDto arch = new Archivo_s3_ResponseDto();
-                            arch.nombre = c.archivo_s3.nombre_archivo_app;
-                            arch.id = c.archivo_s3.id_archivo;
-                            archDto.Add(arch);
+                            Response.StatusCode = 401;
                         }
-                        ViewBag.files = archDto;
-                        ViewBag.repo = id_repo;
-                        ViewBag.repoName = repo.nombre;
+                        else
+                        {
+                            List<Archivo_s3_ResponseDto> archDto = new List<Archivo_s3_ResponseDto>();
+                            List<referencia> refer = repo.referencia.ToList();
+                            foreach (referencia c in refer)
+                            {
+                                Archivo_s3_ResponseDto arch = new Archivo_s3_ResponseDto();
+                                arch.nombre = c.archivo_s3.nombre_archivo_app;
+                                arch.id = c.archivo_s3.id_archivo;
+                                archDto.Add(arch);
+                            }
+                            ViewBag.files = archDto;
+                            ViewBag.repo = id_repo;
+                            ViewBag.repoName = repo.nombre;
+                        }
                     }
                 }
             }
+            
             return View();
         }
 
         public ActionResult RepoList()
         {
-            int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
-            string nombreUsuario = System.Web.HttpContext.Current.Session["usernameS"].ToString();
-            if (nombreUsuario == null)
-            {
-                Response.StatusCode = 401;
-            }
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { Response.StatusCode = 401; }
             else
             {
-                List<RepoResponseDto> repos = new List<RepoResponseDto>();
-                List<suscripcion> sus = db.suscripcion.Where(x => x.id_usuario == idUsuario).ToList();
-                foreach(suscripcion c in sus)
+                int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
+                string nombreUsuario = System.Web.HttpContext.Current.Session["usernameS"].ToString();
+                if (nombreUsuario == null)
                 {
-                    RepoResponseDto r = new RepoResponseDto();
-                    r.id = c.repositorio.id_repositorio;
-                    r.nombre = c.repositorio.nombre;
-                    repos.Add(r);
+                    Response.StatusCode = 401;
                 }
-                ViewBag.repos = repos;
+                else
+                {
+                    List<RepoResponseDto> repos = new List<RepoResponseDto>();
+                    ContainerEntities db = new ContainerEntities();
+                    List<suscripcion> sus = db.suscripcion.Where(x => x.id_usuario == idUsuario).ToList();
+                    foreach (suscripcion c in sus)
+                    {
+                        RepoResponseDto r = new RepoResponseDto();
+                        r.id = c.repositorio.id_repositorio;
+                        r.nombre = c.repositorio.nombre;
+                        repos.Add(r);
+                    }
+                    ViewBag.repos = repos;
+                }
             }
+            
             return View();
         }
 

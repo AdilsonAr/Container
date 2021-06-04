@@ -9,7 +9,7 @@
     <Property Name="nombre_archivo_s3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="nombre_bucket" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="id_autor" Type="Int32" />
-    <Property Name="clave_archivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="clave_archivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="fecha" Type="DateTime" Precision="0" />
     <Property Name="peso_Mb" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -47,7 +47,7 @@
     <Property Name="id_referencia" Type="Int32" />
     <Property Name="id_usuario_creador" Type="Int32" />
     <Property Name="tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="referencia" Relationship="Self.fk_link_referencia" FromRole="link" ToRole="referencia" />
     <NavigationProperty Name="usuario" Relationship="Self.fk_link_usuario" FromRole="link" ToRole="usuario" />
   </EntityType>
@@ -61,7 +61,7 @@
     <Property Name="fecha" Type="DateTime" Precision="0" />
     <Property Name="id_usuario_creador" Type="Int32" />
     <Property Name="id_archivo" Type="Int32" />
-    <Property Name="clave_archivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="clave_archivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="archivo_s3" Relationship="Self.fk_referencia_archivo" FromRole="referencia" ToRole="archivo_s3" />
     <NavigationProperty Name="comentario" Relationship="Self.fk_comentario_referencia" FromRole="referencia" ToRole="comentario" />
     <NavigationProperty Name="link" Relationship="Self.fk_link_referencia" FromRole="referencia" ToRole="link" />
@@ -88,16 +88,6 @@
     <Property Name="id_repositorio" Type="Int32" />
     <NavigationProperty Name="repositorio" Relationship="Self.fk_suscripcion_repositorio" FromRole="suscripcion" ToRole="repositorio" />
     <NavigationProperty Name="usuario" Relationship="Self.fk_suscripcion_usuario" FromRole="suscripcion" ToRole="usuario" />
-  </EntityType>
-  <EntityType Name="sysdiagrams">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="usuario">
     <Key>
@@ -257,7 +247,6 @@
     <EntitySet Name="referencia" EntityType="Self.referencia" />
     <EntitySet Name="repositorio" EntityType="Self.repositorio" />
     <EntitySet Name="suscripcion" EntityType="Self.suscripcion" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
     <EntitySet Name="usuario" EntityType="Self.usuario" />
     <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
       <End Role="usuario" EntitySet="usuario" />

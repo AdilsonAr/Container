@@ -30,7 +30,7 @@ namespace Container.FileRepository
             return r;
         }
 
-        public async Task<bool> upload(HttpPostedFileBase file, string path)
+        public async Task<bool> upload(HttpPostedFileBase file, string path, string bucket, string nombre)
         {
             file.SaveAs(path);
             var s3Client = new AmazonS3Client(S3.awsAccessKeyId, S3.awsSecretAccessKey, S3.regionEndpoint);
@@ -43,34 +43,24 @@ namespace Container.FileRepository
                 {
                     var fileTransferUtilityRequest = new TransferUtilityUploadRequest
                     {
-                        BucketName = "ar-container-bucket",
+                        BucketName = bucket,
                         FilePath = path,
                         PartSize = 256,//256 Bytes 
-                        Key = file.FileName,
+                        Key = nombre,
                         CannedACL = S3CannedACL.Private
                     };
                     //fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
                    
                     fileTransferUtility.Upload(fileTransferUtilityRequest);
                     fileTransferUtility.Dispose();
-                    File.Delete(path);
+                    //File.Delete(path);
                 }
                 success = true;
             }
 
             catch (AmazonS3Exception amazonS3Exception)
             {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    m = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    m = "Error occurred: " + amazonS3Exception.Message;
-                }
+               
             }
             return success;
         }

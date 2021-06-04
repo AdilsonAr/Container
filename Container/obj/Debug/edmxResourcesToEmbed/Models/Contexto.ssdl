@@ -9,7 +9,7 @@
     <Property Name="nombre_archivo_s3" Type="varchar" MaxLength="50" />
     <Property Name="nombre_bucket" Type="varchar" MaxLength="50" />
     <Property Name="id_autor" Type="int" />
-    <Property Name="clave_archivo" Type="text" />
+    <Property Name="clave_archivo" Type="varchar" MaxLength="50" />
     <Property Name="fecha" Type="date" />
     <Property Name="peso_Mb" Type="decimal" Precision="18" Scale="0" />
     <Property Name="tipo" Type="varchar" MaxLength="10" />
@@ -42,7 +42,7 @@
     <Property Name="id_referencia" Type="int" />
     <Property Name="id_usuario_creador" Type="int" />
     <Property Name="tipo" Type="varchar" MaxLength="50" />
-    <Property Name="nombre" Type="text" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="referencia">
     <Key>
@@ -54,7 +54,7 @@
     <Property Name="fecha" Type="date" />
     <Property Name="id_usuario_creador" Type="int" />
     <Property Name="id_archivo" Type="int" />
-    <Property Name="clave_archivo" Type="text" />
+    <Property Name="clave_archivo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="repositorio">
     <Key>
@@ -72,16 +72,6 @@
     <Property Name="nivel" Type="varchar" MaxLength="50" />
     <Property Name="id_usuario" Type="int" />
     <Property Name="id_repositorio" Type="int" />
-  </EntityType>
-  <EntityType Name="sysdiagrams">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="principal_id" Type="int" Nullable="false" />
-    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="version" Type="int" />
-    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="usuario">
     <Key>
@@ -235,7 +225,6 @@
     <EntitySet Name="referencia" EntityType="Self.referencia" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="repositorio" EntityType="Self.repositorio" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="suscripcion" EntityType="Self.suscripcion" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
       <End Role="usuario" EntitySet="usuario" />

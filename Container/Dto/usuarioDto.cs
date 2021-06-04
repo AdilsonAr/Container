@@ -36,7 +36,7 @@ namespace Container.Dto
 
         public static usuario toModel(usuarioDto u)
         {
-            return new usuario(u.id_usuario, u.nombres, u.apellidos, u.usuario1, u.correo,u.nivel, u.clave);
+            return new usuario(u.nombres, u.apellidos, u.usuario1, u.correo,u.nivel, u.clave);
         }
     }
 }

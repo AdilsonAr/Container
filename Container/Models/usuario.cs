@@ -32,18 +32,6 @@ namespace Container.Models
         public string correo { get; set; }
         public string nivel { get; set; }
         public string clave { get; set; }
-
-        public usuario(int id_usuario, string nombres, string apellidos, string usuario1, 
-            string correo,string nivel, string clave)
-        {
-            this.id_usuario = id_usuario;
-            this.nombres = nombres;
-            this.apellidos = apellidos;
-            this.usuario1 = usuario1;
-            this.correo = correo;
-            this.nivel = nivel;
-            this.clave = clave;
-        }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<archivo_s3> archivo_s3 { get; set; }
@@ -57,5 +45,14 @@ namespace Container.Models
         public virtual ICollection<referencia> referencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<suscripcion> suscripcion { get; set; }
+        public usuario(string nombre, string apellido, string usuario1, string correo, string nivel, string clave)
+        {
+            this.nombres = nombre;
+            this.apellidos = apellido;
+            this.usuario1 = usuario1;
+            this.correo = correo;
+            this.nivel = nivel;
+            this.clave = clave;
+        }
     }
 }

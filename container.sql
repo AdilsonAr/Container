@@ -1,8 +1,13 @@
 create database Container;
 use Container;
 
-use master
-drop database Container
+--USE master;
+--GO
+--ALTER DATABASE Container 
+--SET SINGLE_USER 
+--WITH ROLLBACK IMMEDIATE;
+--GO
+--DROP DATABASE Container;
 
 create table usuario(
 id_usuario int identity,
@@ -39,7 +44,7 @@ nombre_archivo_app varchar(50),
 nombre_archivo_s3 varchar(50),
 nombre_bucket varchar(50),
 id_autor int,
-clave_archivo text,
+clave_archivo varchar(50),
 fecha date,
 peso_Mb decimal,
 tipo varchar(10)
@@ -64,7 +69,7 @@ rama int,
 fecha date,
 id_usuario_creador int,
 id_archivo int,
-clave_archivo text
+clave_archivo varchar(50)
 );
 alter table referencia add constraint pk_referencia primary key(id_referencia)
 alter table referencia add constraint fk_referencia_usuario foreign key(id_usuario_creador) references usuario(id_usuario)
@@ -91,7 +96,7 @@ id_link int identity,
 id_referencia int,
 id_usuario_creador int,
 tipo varchar(50),
-nombre text
+nombre varchar(50)
 );
 alter table link add constraint pk_link primary key(id_link)
 alter table link add constraint fk_link_referencia foreign key(id_referencia) references referencia(id_referencia)

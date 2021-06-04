@@ -16,6 +16,7 @@ namespace Container.Controllers
         [HttpGet]
         public ActionResult Container()
         {
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { Response.StatusCode = 401; }
             return View();
         }
         // GET: Home
@@ -80,6 +81,7 @@ namespace Container.Controllers
 
         public ActionResult LogOut()
         {
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { Response.StatusCode = 401; }
             Session.Clear();
             return RedirectToAction("LoginParcial", "Home");
         }
