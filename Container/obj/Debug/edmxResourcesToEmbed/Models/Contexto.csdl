@@ -51,6 +51,16 @@
     <NavigationProperty Name="referencia" Relationship="Self.fk_link_referencia" FromRole="link" ToRole="referencia" />
     <NavigationProperty Name="usuario" Relationship="Self.fk_link_usuario" FromRole="link" ToRole="usuario" />
   </EntityType>
+  <EntityType Name="link_nombre">
+    <Key>
+      <PropertyRef Name="id_link_nombre" />
+    </Key>
+    <Property Name="id_link_nombre" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_usuario" Type="Int32" />
+    <Property Name="aceptada" Type="Int32" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="usuario" Relationship="Self.fk_link_nombre_usuario" FromRole="link_nombre" ToRole="usuario" />
+  </EntityType>
   <EntityType Name="referencia">
     <Key>
       <PropertyRef Name="id_referencia" />
@@ -86,8 +96,19 @@
     <Property Name="nivel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="id_usuario" Type="Int32" />
     <Property Name="id_repositorio" Type="Int32" />
+    <Property Name="aceptada" Type="Int32" />
     <NavigationProperty Name="repositorio" Relationship="Self.fk_suscripcion_repositorio" FromRole="suscripcion" ToRole="repositorio" />
     <NavigationProperty Name="usuario" Relationship="Self.fk_suscripcion_usuario" FromRole="suscripcion" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="usuario">
     <Key>
@@ -104,6 +125,7 @@
     <NavigationProperty Name="avatar_s3" Relationship="Self.fk_avatar_s3_usuario" FromRole="usuario" ToRole="avatar_s3" />
     <NavigationProperty Name="comentario" Relationship="Self.fk_comentario_usuario" FromRole="usuario" ToRole="comentario" />
     <NavigationProperty Name="link" Relationship="Self.fk_link_usuario" FromRole="usuario" ToRole="link" />
+    <NavigationProperty Name="link_nombre" Relationship="Self.fk_link_nombre_usuario" FromRole="usuario" ToRole="link_nombre" />
     <NavigationProperty Name="referencia" Relationship="Self.fk_referencia_usuario" FromRole="usuario" ToRole="referencia" />
     <NavigationProperty Name="suscripcion" Relationship="Self.fk_suscripcion_usuario" FromRole="usuario" ToRole="suscripcion" />
   </EntityType>
@@ -191,6 +213,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_link_nombre_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="link_nombre" Type="Self.link_nombre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="link_nombre">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_referencia_repositorio">
     <End Role="repositorio" Type="Self.repositorio" Multiplicity="0..1" />
     <End Role="referencia" Type="Self.referencia" Multiplicity="*" />
@@ -244,9 +278,11 @@
     <EntitySet Name="avatar_s3" EntityType="Self.avatar_s3" />
     <EntitySet Name="comentario" EntityType="Self.comentario" />
     <EntitySet Name="link" EntityType="Self.link" />
+    <EntitySet Name="link_nombre" EntityType="Self.link_nombre" />
     <EntitySet Name="referencia" EntityType="Self.referencia" />
     <EntitySet Name="repositorio" EntityType="Self.repositorio" />
     <EntitySet Name="suscripcion" EntityType="Self.suscripcion" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
     <EntitySet Name="usuario" EntityType="Self.usuario" />
     <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
       <End Role="usuario" EntitySet="usuario" />
@@ -275,6 +311,10 @@
     <AssociationSet Name="fk_link_usuario" Association="Self.fk_link_usuario">
       <End Role="usuario" EntitySet="usuario" />
       <End Role="link" EntitySet="link" />
+    </AssociationSet>
+    <AssociationSet Name="fk_link_nombre_usuario" Association="Self.fk_link_nombre_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="link_nombre" EntitySet="link_nombre" />
     </AssociationSet>
     <AssociationSet Name="fk_referencia_repositorio" Association="Self.fk_referencia_repositorio">
       <End Role="repositorio" EntitySet="repositorio" />

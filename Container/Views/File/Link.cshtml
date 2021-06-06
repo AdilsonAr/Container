@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Link";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Link de recursos</h2>
+<h3>
+    @ViewBag.res
+</h3>
+@if (ViewBag.found)
+{
+    <button id="downloadLink" class="btn btn-primary">Descargar</button>
+    <h3>Tamaño de la descarga: @ViewBag.peso</h3>
+    <h3>Tipo de archivo: @ViewBag.tipo</h3>
+
+    <script>
+        $('#downloadLink').click(function (e) {
+            e.preventDefault()
+            window.location.href = '/File/DownloadLink?nombre=' + '@ViewBag.link'
+        })
+    </script>
+}

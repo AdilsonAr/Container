@@ -44,6 +44,15 @@
     <Property Name="tipo" Type="varchar" MaxLength="50" />
     <Property Name="nombre" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="link_nombre">
+    <Key>
+      <PropertyRef Name="id_link_nombre" />
+    </Key>
+    <Property Name="id_link_nombre" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_usuario" Type="int" />
+    <Property Name="aceptada" Type="int" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="referencia">
     <Key>
       <PropertyRef Name="id_referencia" />
@@ -72,6 +81,17 @@
     <Property Name="nivel" Type="varchar" MaxLength="50" />
     <Property Name="id_usuario" Type="int" />
     <Property Name="id_repositorio" Type="int" />
+    <Property Name="aceptada" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="usuario">
     <Key>
@@ -129,6 +149,18 @@
         <PropertyRef Name="id_usuario" />
       </Principal>
       <Dependent Role="comentario">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_link_nombre_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="link_nombre" Type="Self.link_nombre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="link_nombre">
         <PropertyRef Name="id_usuario" />
       </Dependent>
     </ReferentialConstraint>
@@ -222,9 +254,11 @@
     <EntitySet Name="avatar_s3" EntityType="Self.avatar_s3" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="comentario" EntityType="Self.comentario" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="link" EntityType="Self.link" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="link_nombre" EntityType="Self.link_nombre" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="referencia" EntityType="Self.referencia" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="repositorio" EntityType="Self.repositorio" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="suscripcion" EntityType="Self.suscripcion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
       <End Role="usuario" EntitySet="usuario" />
@@ -241,6 +275,10 @@
     <AssociationSet Name="fk_comentario_usuario" Association="Self.fk_comentario_usuario">
       <End Role="usuario" EntitySet="usuario" />
       <End Role="comentario" EntitySet="comentario" />
+    </AssociationSet>
+    <AssociationSet Name="fk_link_nombre_usuario" Association="Self.fk_link_nombre_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="link_nombre" EntitySet="link_nombre" />
     </AssociationSet>
     <AssociationSet Name="fk_link_referencia" Association="Self.fk_link_referencia">
       <End Role="referencia" EntitySet="referencia" />

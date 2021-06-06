@@ -31,6 +31,7 @@ id_suscripcion int identity,
 nivel varchar(50),
 id_usuario int,
 id_repositorio int,
+aceptada int
 );
 alter table suscripcion add constraint pk_suscripcion primary key(id_suscripcion)
 alter table suscripcion add constraint fk_suscripcion_usuario foreign key(id_usuario) references usuario(id_usuario)
@@ -103,4 +104,14 @@ alter table link add constraint fk_link_referencia foreign key(id_referencia) re
 on delete no action on update no action
 
 alter table link add constraint fk_link_usuario foreign key(id_usuario_creador) references usuario(id_usuario)
+on delete no action on update no action
+
+create table link_nombre(
+id_link_nombre int identity,
+id_usuario int,
+aceptada int,
+nombre varchar(50)
+);
+alter table link_nombre add constraint pk_link_nombre primary key(id_link_nombre)
+alter table link_nombre add constraint fk_link_nombre_usuario foreign key(id_usuario) references usuario(id_usuario)
 on delete no action on update no action

@@ -7,7 +7,7 @@
     {
         <tr>
             <td>
-                <div id="@c.id">
+                <div class="fileObject" id="@c.id">
                     @c.nombre
                 </div>
             </td>
@@ -31,7 +31,7 @@
             <div class="modal-body">
                 <form action="/File/UploadFile" enctype="multipart/form-data" method="post" id="frmFile">
                     <h3>Seleccione el archivo</h3>
-                    <input type="file" name="file" id="file"/>
+                    <input type="file" name="file" id="file" />
                     <div id="errMessage" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
                     <div class="progress my-2" style="display:none;" id="progressBar">
                         <div class="progress-bar progress-bar-animated progress-bar-striped active" role="progressbar"
@@ -43,14 +43,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="nuevoAr" >Subir archivo</button>
+                <button type="button" class="btn btn-primary" id="nuevoAr">Subir archivo</button>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-    
     $('#nuevoAr').on("click", function () {
         if ($('#file').get(0).files.length === 0) {
             $('#errMessage').show()
@@ -89,6 +87,7 @@
                         icon: "success",
                         button: "Ok"
                     })
+                    loadPage("/File/FileList?id_repo=" + @ViewBag.repo, '#fileList')
                 } else {
                     $('#UploadModal').modal('hide')
                     swal({
@@ -98,17 +97,16 @@
                         button: "Ok"
                     })
                 }
-                
+
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseText)
                 swal({
                     title: "Error al cargar la página",
                     text: "La operacion no se pudo realizar",
                     icon: "error",
                     button: "Ok"
                 })
-            })           
-        }        
+            })
+        }
     })
 
     $('#UploadModal').on('show.bs.modal', function (e) {
@@ -118,5 +116,10 @@
 
     $('#UploadModal').on('hidden.bs.modal', function (e) {
         $('#frmFile')[0].reset();
+    })
+
+    $('.fileObject').on("click", function () {
+        $('#fileOptions').show()
+        $('#idFileToOptions').text(this.id)
     })
 </script>

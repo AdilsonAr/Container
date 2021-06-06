@@ -12,15 +12,13 @@ namespace Container.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class suscripcion
+    public partial class link_nombre
     {
-        public int id_suscripcion { get; set; }
-        public string nivel { get; set; }
+        public int id_link_nombre { get; set; }
         public Nullable<int> id_usuario { get; set; }
-        public Nullable<int> id_repositorio { get; set; }
         public Nullable<int> aceptada { get; set; }
+        public string nombre { get; set; }
     
-        public virtual repositorio repositorio { get; set; }
         public virtual usuario usuario { get; set; }
     }
 }

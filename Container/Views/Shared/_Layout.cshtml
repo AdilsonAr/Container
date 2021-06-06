@@ -8,49 +8,50 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <p class="navbar-brand" id="index">Container</p>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">          
-            <ul class="nav navbar-nav" style="float:right !important">
-                @if (Session["usernameS"] != null)
-                {
-                    <li>
-                        <button class="btn btn-light" id="logOut">LogOut</button>
-                    </li>
-                    <li>
-                        <button class="btn btn-light" id="archivos">Mis archivos</button>
-                    </li>
+    <div style="height:100vh;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <p class="navbar-brand" id="index">Container</p>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav navbar-nav" style="float:right !important">
+                    @if (Session["usernameS"] != null)
+                    {
+                        <li>
+                            <button class="btn btn-light" id="logOut">LogOut</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-light" id="archivos">Mis archivos</button>
+                        </li>
 
-                    <li><p style="color:brown;margin-top:15px">Hola @Session["usernameS"] </p></li>
-                }
-                else
-                {
-                    <li>
-                        <button class="btn btn-light" id="signUp">SignUp</button>
-                    </li>
-                    <li>
-                        <button class="btn btn-light" id="logIn">Login</button>
-                    </li>
-                }
-            </ul>
+                        <li><p style="color:brown;margin-top:15px">Hola @Session["usernameS"] </p></li>
+                    }
+                    else
+                    {
+                        <li>
+                            <button class="btn btn-light" id="signUp">SignUp</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-light" id="logIn">Login</button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Container</p>
+            </footer>
         </div>
-    </nav>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Container</p>
-        </footer>
-    </div>
-
-    <script type="text/javascript">
+        <script type="text/javascript">
     $("#logIn").on("click", function () {
     loadPage("/Home/LoginParcial")
     })
@@ -69,12 +70,12 @@
 
     $("#logOut").on("click", function () {
         $.ajax({
-                    type: 'get',                   
+                    type: 'get',
                     url: '@Url.Action("LogOut", "Home")'
                 }).done(function () {
                     location.href="/Home/Index"
                 })
-                .fail(function () {                   
+                .fail(function () {
                     swal({
                         title: "Error al cargar la página",
                         text: "La operacion no se pudo realizar",
@@ -83,6 +84,7 @@
                     })
                  })
     })
-    </script>
+        </script>
+    </div>
 </body>
 </html>

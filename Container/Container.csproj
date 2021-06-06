@@ -138,6 +138,7 @@
     <Compile Include="Dto\Archivo_s3_ResponseDto.cs" />
     <Compile Include="Dto\loginDto.cs" />
     <Compile Include="Dto\RepoResponseDto.cs" />
+    <Compile Include="Dto\Response.cs" />
     <Compile Include="Dto\usuarioDto.cs" />
     <Compile Include="FileRepository\FileRepo.cs" />
     <Compile Include="Global.asax.cs">
@@ -170,6 +171,9 @@
     <Compile Include="Models\link.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\link_nombre.cs">
+      <DependentUpon>Contexto.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\referencia.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
@@ -177,6 +181,9 @@
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\suscripcion.cs">
+      <DependentUpon>Contexto.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usuario.cs">
@@ -346,6 +353,7 @@
     <Content Include="Views\File\Files.cshtml" />
     <Content Include="Views\File\RepoList.cshtml" />
     <Content Include="Views\File\FileList.cshtml" />
+    <Content Include="Views\File\Link.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

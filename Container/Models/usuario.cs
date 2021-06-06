@@ -21,6 +21,7 @@ namespace Container.Models
             this.avatar_s3 = new HashSet<avatar_s3>();
             this.comentario = new HashSet<comentario>();
             this.link = new HashSet<link>();
+            this.link_nombre = new HashSet<link_nombre>();
             this.referencia = new HashSet<referencia>();
             this.suscripcion = new HashSet<suscripcion>();
         }
@@ -41,6 +42,8 @@ namespace Container.Models
         public virtual ICollection<comentario> comentario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<link> link { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<link_nombre> link_nombre { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<referencia> referencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

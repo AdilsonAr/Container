@@ -17,6 +17,13 @@ namespace Container.FileRepository
 {
     public class FileRepo
     {
+        public TransferUtility getUtility()
+        {
+            var s3Client = new AmazonS3Client(S3.awsAccessKeyId,
+                S3.awsSecretAccessKey, S3.regionEndpoint);
+            return new TransferUtility(s3Client);           
+        }
+
         public async Task<string> testListBucketsAsync()
         {
             string r = "";
@@ -35,7 +42,6 @@ namespace Container.FileRepository
             file.SaveAs(path);
             var s3Client = new AmazonS3Client(S3.awsAccessKeyId, S3.awsSecretAccessKey, S3.regionEndpoint);
             bool success = false;
-            string m = "";
             var fileTransferUtility = new TransferUtility(s3Client);
             try
             {
@@ -53,7 +59,6 @@ namespace Container.FileRepository
                    
                     fileTransferUtility.Upload(fileTransferUtilityRequest);
                     fileTransferUtility.Dispose();
-                    //File.Delete(path);
                 }
                 success = true;
             }

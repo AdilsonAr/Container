@@ -14,11 +14,75 @@
         </tr>
     }
 </table>
-<button>
+<button class="btn btn-primary" data-toggle="modal" data-target="#nuevoRepoModal">
     Nuevo
 </button>
+
+<div class="modal fade" id="nuevoRepoModal" tabindex="-1" role="dialog" aria-labelledby="nuevo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="upload">Nuevo repositorio de equipo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/File/CreateRepo" method="post" id="frmRepo">
+                    <input type="text" name="nombre" placeholder="nombre" id="nombreVal" />
+                </form>
+                <div id="errMessage2" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="nuevoRepo">Crear repositorio</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    $('#nuevoRepoModal').on('show.bs.modal', function (e) {
+        $('#errMessage2').hide()
+    })
+
+    $('#nuevoRepoModal').on('hidden.bs.modal', function (e) {
+        $('#frmRepo')[0].reset();
+    })
+
     $(".itemRepo").on("click", function () {
-        loadPage("/File/FileList?id_repo=" +this.id, '#fileList')
+        $('#fileOptions').hide()
+        loadPage("/File/FileList?id_repo=" + this.id, '#fileList')
+    })
+
+    $('#nuevoRepo').on('click', function () {
+        var datos = $('#frmRepo')
+        if ($('#nombreVal').val() == '') {
+            $('#errMessage2').show()
+        } else {
+            $.ajax({
+                url: "/File/CreateRepo",
+                data: datos.serialize(),
+                type: "post"
+            }).done(function (response) {
+                $('#nuevoRepoModal').modal('hide')
+                swal({
+                    title: "Completado",
+                    text: "La operacion ha sido completada",
+                    icon: "success",
+                    button: "Ok"
+                })
+                loadPage("/File/RepoList", '#repoList')
+            }).fail(function () {
+                $('#nuevoRepoModal').modal('hide')
+                swal({
+                    title: "Error al cargar la página",
+                    text: "La operacion no se pudo realizar",
+                    icon: "error",
+                    button: "Ok"
+                })
+            })
+        }
+       
     })
 </script>
