@@ -4,29 +4,29 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="963bad52d935427fa57d2ca59f4f1346" Name="Diagram1">
-        <EntityTypeShape EntityType="ContainerModel.archivo_s3" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.avatar_s3" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.comentario" Width="1.5" PointX="7.5" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.link" Width="1.5" PointX="10.5" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.link_nombre" Width="1.5" PointX="3" PointY="11.125" IsExpanded="true" />
+      <Diagram DiagramId="35fae8bc1a364d6689764566a47519fc" Name="Diagram1">
+        <EntityTypeShape EntityType="ContainerModel.archivo_s3" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.comentario" Width="1.5" PointX="7.5" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.link" Width="1.5" PointX="7.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.link_app" Width="1.5" PointX="10.5" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ContainerModel.referencia" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.repositorio" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.suscripcion" Width="1.5" PointX="6" PointY="10.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ContainerModel.usuario" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.repositorio" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.suscripcion" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContainerModel.usuario" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
         <AssociationConnector Association="ContainerModel.fk_archivo_s3_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_referencia_archivo" ManuallyRouted="false" />
-        <AssociationConnector Association="ContainerModel.fk_avatar_s3_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_comentario_referencia" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_comentario_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_link_referencia" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_link_usuario" ManuallyRouted="false" />
-        <AssociationConnector Association="ContainerModel.fk_link_nombre_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ContainerModel.fk_link_app_referencia" ManuallyRouted="false" />
+        <AssociationConnector Association="ContainerModel.fk_link_app_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ContainerModel.fk_link_app_usuario_creador" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_referencia_repositorio" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_referencia_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_suscripcion_repositorio" ManuallyRouted="false" />
         <AssociationConnector Association="ContainerModel.fk_suscripcion_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ContainerModel.fk_suscripcion_usuario_creador" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

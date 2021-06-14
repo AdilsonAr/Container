@@ -27,7 +27,7 @@ namespace Container.Models
         public Nullable<int> id_autor { get; set; }
         public string clave_archivo { get; set; }
         public Nullable<System.DateTime> fecha { get; set; }
-        public Nullable<decimal> peso_Mb { get; set; }
+        public Nullable<int> peso_bytes { get; set; }
         public string tipo { get; set; }
     
         public virtual usuario usuario { get; set; }

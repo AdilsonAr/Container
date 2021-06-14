@@ -7,7 +7,7 @@ namespace Container.Dto
 {
     public class Archivo_s3_ResponseDto
     {
-        public int id { get; set; }
         public string nombre { get; set; }
+        public string rama { get; set; }
     }
 }

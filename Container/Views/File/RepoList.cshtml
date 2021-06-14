@@ -1,19 +1,17 @@
 ﻿@{
     Layout = null;
 }
-
-<table class="table">
+<div style="display:none;" id="idCurrentRepo"></div>
+<div style="display:none;" id="nameCurrentRepo"></div>
+<div style="display:none;" id="nameCurrentVersion"></div>
+<ul>
     @foreach (Container.Dto.RepoResponseDto c in ViewBag.repos)
     {
-        <tr>
-            <td>
-                <div class="itemRepo" id="@c.id">
-                    @c.nombre
-                </div>
-            </td>
-        </tr>
+    <li class="itemRepo" id="@c.id">
+        @c.nombre
+    </li>
     }
-</table>
+</ul>
 <button class="btn btn-primary" data-toggle="modal" data-target="#nuevoRepoModal">
     Nuevo
 </button>
@@ -51,7 +49,8 @@
     })
 
     $(".itemRepo").on("click", function () {
-        $('#fileOptions').hide()
+        $('#idCurrentRepo').text(this.id)
+        $('#nameCurrentRepo').text($(this).text())
         loadPage("/File/FileList?id_repo=" + this.id, '#fileList')
     })
 
@@ -66,12 +65,14 @@
                 type: "post"
             }).done(function (response) {
                 $('#nuevoRepoModal').modal('hide')
+                $(".modal-backdrop").remove();
                 swal({
                     title: "Completado",
                     text: "La operacion ha sido completada",
                     icon: "success",
                     button: "Ok"
                 })
+                
                 loadPage("/File/RepoList", '#repoList')
             }).fail(function () {
                 $('#nuevoRepoModal').modal('hide')

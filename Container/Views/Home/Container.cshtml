@@ -10,7 +10,7 @@
     function loadDirect(info) {
         $('#content').html(info)
     }        
-
+     
     function loadPage(page, where) {
     $(where).hide()
     $.ajax({
@@ -23,7 +23,8 @@
             $(where).html(result)
             $(where).show()
         })
-        .fail(function () {
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            //alert(jqXHR.responseText)
             $(where).show()
             swal({
                 title: "Error al cargar la página",

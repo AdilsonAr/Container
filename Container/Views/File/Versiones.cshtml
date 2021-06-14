@@ -1,0 +1,217 @@
+﻿@{
+    Layout = null;
+}
+<div class="row">
+    <a id="goFile"></a><p id="rama"></p>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="row" id="fileOptions" style="display:none;">
+            <button class="btn btn-primary" id="descargar">Descargar</button>
+            <button class="btn btn-primary" id="compartir">Compartir</button>
+            <button class="btn btn-primary" id="obtenerLink">Obtener link</button>
+            <div style="display:none;" id="idFileToOptions"></div>
+            <div style="display:none;" id="lastLink"></div>
+        </div>
+        <ul>
+            @foreach (Container.Dto.VersionDto c in ViewBag.files)
+            {
+                <li>
+                    <div class="versionFile" id="@c.id_referencia">
+                        @c.nombre, version: @c.version
+                    </div>
+                </li>
+            }
+        </ul>
+        <button class="btn btn-info" data-toggle="modal" data-target="#UploadVersionModal">Nueva version</button>
+    </div>
+
+    <div class="col-4">
+        <div id="fileComentarios"></div>
+        <textarea id="comentario"></textarea><button id="enviarComentario" class="btn btn-success">Enviar</button>
+    </div>
+
+    <div class="col-4" id="fileDetails">
+        
+    </div>
+</div>
+
+<div class="modal fade" id="UploadVersionModal" tabindex="-1" role="dialog" aria-labelledby="upload" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="upload">Carga de un nuevo archivo a @ViewBag.repoName</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/File/UploadFile" enctype="multipart/form-data" method="post" id="frmVersion">
+                    <h3>Seleccione el archivo</h3>
+                    <input type="file" name="file" id="file" />
+                    <div id="errMessage" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
+                    <div class="progress my-2" style="display:none;" id="progressBar">
+                        <div class="progress-bar progress-bar-animated progress-bar-striped active" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                            0%
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="nuevoAr">Subir archivo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#enviarComentario').on('click', function () {
+        if ($('#comentario').val() != '') {
+            $.ajax({
+                url: "/Comentario/NewComentario?contenido=" + $('#comentario').val() + '&id_referencia=' + $('#idFileToOptions').text(),
+                type: "get"
+            }).done(function (res) {
+                loadPage("/Comentario/Comentarios?id_referencia=" + $('#idFileToOptions').text(), '#fileComentarios')
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: "Error al cargar la página",
+                    text: "La operacion no se pudo realizar",
+                    icon: "error",
+                    button: "Ok"
+                })
+            })
+        }
+
+    })
+
+    $('#goFile').text('/'+$('#nameCurrentRepo').text())
+    $('#rama').text('/'+$('#nameCurrentVersion').text())
+
+    $('#goFile').on('click', function () {
+        loadPage("/File/FileList?id_repo=" + $('#idCurrentRepo').text(), '#fileList')
+    })
+
+    $('.versionFile').on("click", function () {
+        $('#fileOptions').show()
+        $('#idFileToOptions').text(this.id)
+        loadPage("/Metadatos/FileDetails?id=" + this.id, '#fileDetails')
+        loadPage("/Comentario/Comentarios?id_referencia=" + this.id, '#fileComentarios')
+    })
+
+    $('#descargar').click(function (e) {
+        if ($('#idFileToOptions').text() != '') {
+            e.preventDefault()
+            window.location.href = '/File/Download?id=' + $('#idFileToOptions').text()
+        }
+    })
+    $('#compartir').on('click', function () {
+        if ($('#idFileToOptions').text() != '') {
+
+        }
+    })
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+    $('#obtenerLink').on('click', function () {
+        if ($('#idFileToOptions').text() != '') {
+            $.ajax({
+                url: "/Link/GetLink?id=" + $('#idFileToOptions').text(),
+                type: "get"
+            }).done(function (res) {
+                $('#lastLink').text(res.m)
+                copyToClipboard('#lastLink')
+                swal({
+                    title: "Completado",
+                    text: "El link fue copiado al portapapeles",
+                    icon: "success",
+                    button: "Ok"
+                })
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: "Error al cargar la página",
+                    text: "La operacion no se pudo realizar",
+                    icon: "error",
+                    button: "Ok"
+                })
+            })
+        }
+    })
+
+    $('#nuevoAr').on("click", function () {
+        if ($('#file').get(0).files.length === 0) {
+            $('#errMessage').show()
+        } else {
+            $('#errMessage').hide()
+            $('#progressBar').show()
+            fileuploaddata = new FormData($('#frmVersion')[0])
+            fileuploaddata.append('repo_id',@ViewBag.repo)
+            fileuploaddata.append('rama', '@ViewBag.rama')
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            percentComplete = parseInt(percentComplete * 100);
+                            $('.progress-bar').width(percentComplete + '%');
+                            $('.progress-bar').html(percentComplete + '%');
+                        }
+                    }, false);
+
+                    return xhr;
+                },
+                url: '/File/UploadFile',
+                type: "POST",
+                data: fileuploaddata,
+                processData: false,
+                contentType: false,
+                dataType: "json"
+            }).done(function (response) {
+                if (response == true) {
+                    $('#UploadVersionModal').modal('hide')
+                    $(".modal-backdrop").remove();
+                    swal({
+                        title: "Completado",
+                        text: "La operacion ha sido completada",
+                        icon: "success",
+                        button: "Ok"
+                    })
+
+                    loadPage("/File/Versiones?id_repo=" + "@ViewBag.repo" + "&rama=" + "@ViewBag.rama", '#fileList')
+                } else {
+                    $('#UploadVersionModal').modal('hide')
+                    swal({
+                        title: "Error al procesar el archivo",
+                        text: "La operacion no se pudo realizar",
+                        icon: "error",
+                        button: "Ok"
+                    })
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: "Error al cargar la página",
+                    text: "La operacion no se pudo realizar",
+                    icon: "error",
+                    button: "Ok"
+                })
+            })
+        }
+    })
+
+    $('#UploadVersionModal').on('show.bs.modal', function (e) {
+        $('#progressBar').hide()
+        $('#errMessage').hide()
+    })
+
+    $('#UploadVersionModal').on('hidden.bs.modal', function (e) {
+        $('#frmVersion')[0].reset();
+    })
+</script>

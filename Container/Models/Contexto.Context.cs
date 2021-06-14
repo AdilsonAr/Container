@@ -26,14 +26,12 @@ namespace Container.Models
         }
     
         public virtual DbSet<archivo_s3> archivo_s3 { get; set; }
-        public virtual DbSet<avatar_s3> avatar_s3 { get; set; }
         public virtual DbSet<comentario> comentario { get; set; }
         public virtual DbSet<link> link { get; set; }
-        public virtual DbSet<link_nombre> link_nombre { get; set; }
+        public virtual DbSet<link_app> link_app { get; set; }
         public virtual DbSet<referencia> referencia { get; set; }
         public virtual DbSet<repositorio> repositorio { get; set; }
         public virtual DbSet<suscripcion> suscripcion { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
     }
 }

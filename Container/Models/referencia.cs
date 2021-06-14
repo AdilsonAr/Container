@@ -19,11 +19,13 @@ namespace Container.Models
         {
             this.comentario = new HashSet<comentario>();
             this.link = new HashSet<link>();
+            this.link_app = new HashSet<link_app>();
         }
     
         public int id_referencia { get; set; }
         public Nullable<int> id_repositorio { get; set; }
-        public Nullable<int> rama { get; set; }
+        public Nullable<int> vers { get; set; }
+        public string rama { get; set; }
         public Nullable<System.DateTime> fecha { get; set; }
         public Nullable<int> id_usuario_creador { get; set; }
         public Nullable<int> id_archivo { get; set; }
@@ -34,6 +36,8 @@ namespace Container.Models
         public virtual ICollection<comentario> comentario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<link> link { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<link_app> link_app { get; set; }
         public virtual repositorio repositorio { get; set; }
         public virtual usuario usuario { get; set; }
     }

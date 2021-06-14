@@ -49,22 +49,29 @@ namespace Container.Controllers
                 else
                 {
                     u.nivel = "principiante";
-                    db.usuario.Add(usuarioDto.toModel(u));
+                    usuario creado=db.usuario.Add(usuarioDto.toModel(u));
+                    db.SaveChanges();
+                    db.usuario.Attach(creado);
                     repositorio repo = new repositorio();
                     repo.tipo = "personal";
                     repo.nombre = u.usuario1;
-                    db.repositorio.Add(repo);
+                    
+                    repositorio repoCreado=db.repositorio.Add(repo);
                     db.SaveChanges();
-
-                    ContainerEntities db2 = new ContainerEntities();
-                    usuario actual = db2.usuario.Where(x => x.usuario1.Equals(u.usuario1)).First();
-                    repositorio repoactual = db2.repositorio.Where(x => x.nombre.Equals(actual.usuario1)).First();
+                    db.repositorio.Attach(repoCreado);
+                    
+                    usuario actual = db.usuario.Where(x => x.usuario1.Equals(u.usuario1)).First();
+                    repositorio repoactual = db.repositorio.Where(x => x.nombre.Equals(actual.usuario1)).First();
                     suscripcion sus = new suscripcion();
                     sus.nivel = "admin";
                     sus.id_usuario = actual.id_usuario;
+                    sus.id_usuario_creador= actual.id_usuario;
+                    sus.aceptada = "si";
                     sus.id_repositorio = repoactual.id_repositorio;
-                    db2.suscripcion.Add(sus);
-                    db2.SaveChanges();
+                    suscripcion susCreada=db.suscripcion.Add(sus);
+                    db.SaveChanges();
+                    db.suscripcion.Attach(susCreada);
+                    
                     Session["userIdS"] = actual.id_usuario;
                     Session["usernameS"] = actual.usuario1.ToString();
                     Response.StatusCode = 200;

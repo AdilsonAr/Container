@@ -52,6 +52,9 @@
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.S3.3.7.0.23\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -133,21 +136,29 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ComentarioController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LinkController.cs" />
+    <Compile Include="Controllers\MetadatosController.cs" />
+    <Compile Include="Controllers\NotificacionController.cs" />
     <Compile Include="Dto\Archivo_s3_ResponseDto.cs" />
+    <Compile Include="Dto\ComentarioDto.cs" />
+    <Compile Include="Dto\DetailsFileDto.cs" />
+    <Compile Include="Dto\LinkDto.cs" />
+    <Compile Include="Dto\Link_appDto.cs" />
     <Compile Include="Dto\loginDto.cs" />
+    <Compile Include="Dto\ReferenciaDto.cs" />
     <Compile Include="Dto\RepoResponseDto.cs" />
     <Compile Include="Dto\Response.cs" />
+    <Compile Include="Dto\SuscripcionDto.cs" />
     <Compile Include="Dto\usuarioDto.cs" />
+    <Compile Include="Dto\VersionDto.cs" />
     <Compile Include="FileRepository\FileRepo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\archivo_s3.cs">
-      <DependentUpon>Contexto.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\avatar_s3.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\comentario.cs">
@@ -171,7 +182,7 @@
     <Compile Include="Models\link.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\link_nombre.cs">
+    <Compile Include="Models\link_app.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\referencia.cs">
@@ -181,9 +192,6 @@
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\suscripcion.cs">
-      <DependentUpon>Contexto.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>Contexto.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usuario.cs">
@@ -353,7 +361,13 @@
     <Content Include="Views\File\Files.cshtml" />
     <Content Include="Views\File\RepoList.cshtml" />
     <Content Include="Views\File\FileList.cshtml" />
-    <Content Include="Views\File\Link.cshtml" />
+    <Content Include="Views\Link\Link.cshtml" />
+    <Content Include="Views\File\RepoConf.cshtml" />
+    <Content Include="Views\File\Versiones.cshtml" />
+    <Content Include="Views\Notificacion\Notificaciones.cshtml" />
+    <Content Include="Views\File\Usuarios.cshtml" />
+    <Content Include="Views\Comentario\Comentarios.cshtml" />
+    <Content Include="Views\Metadatos\FileDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -370,6 +384,7 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.0.23\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />

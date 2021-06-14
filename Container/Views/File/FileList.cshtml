@@ -2,19 +2,16 @@
     Layout = null;
 }
 
-<table class="table">
+<ul>
     @foreach (Container.Dto.Archivo_s3_ResponseDto c in ViewBag.files)
     {
-        <tr>
-            <td>
-                <div class="fileObject" id="@c.id">
-                    @c.nombre
-                </div>
-            </td>
-        </tr>
+        <li>
+            <div class="fileObject" id="@c.rama">
+                @c.nombre
+            </div>
+        </li>
     }
-
-</table>
+</ul>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UploadModal">
     Nuevo
 </button>
@@ -57,6 +54,7 @@
             $('#progressBar').show()
             fileuploaddata = new FormData($('#frmFile')[0])
             fileuploaddata.append('repo_id',@ViewBag.repo)
+            fileuploaddata.append('rama','na')
             $.ajax({
                 xhr: function () {
                     var xhr = new window.XMLHttpRequest();
@@ -90,6 +88,7 @@
                     loadPage("/File/FileList?id_repo=" + @ViewBag.repo, '#fileList')
                 } else {
                     $('#UploadModal').modal('hide')
+                    $(".modal-backdrop").remove();
                     swal({
                         title: "Error al procesar el archivo",
                         text: "La operacion no se pudo realizar",
@@ -119,7 +118,7 @@
     })
 
     $('.fileObject').on("click", function () {
-        $('#fileOptions').show()
-        $('#idFileToOptions').text(this.id)
+        $('#nameCurrentVersion').text($(this).text())
+        loadPage("/File/Versiones?id_repo=" + "@ViewBag.repo" + "&rama=" + this.id, '#fileList')
     })
 </script>

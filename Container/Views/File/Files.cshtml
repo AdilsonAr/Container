@@ -47,13 +47,6 @@
     </div>
 
     <div class="col-10 scrollDiv">
-        <div class="row" id="fileOptions" style="display:none;">
-            <button class="btn btn-primary" id="descargar">Descargar</button>
-            <button class="btn btn-primary" id="compartir">Compartir</button>
-            <button class="btn btn-primary" id="obtenerLink">Obtener link</button>
-            <div style="display:none;" id="idFileToOptions"></div>
-            <div style="display:none;" id="lastLink"></div>
-        </div>
         <div class="row">
             <div id="fileList"></div>           
         </div>     
@@ -61,47 +54,4 @@
 </div>
 <script>
     loadPage("/File/RepoList", '#repoList')
-    $('#descargar').click(function (e) {
-        if ($('#idFileToOptions').text() != '') {
-            e.preventDefault()
-            window.location.href = '/File/Download?id=' + $('#idFileToOptions').text()
-        }     
-    })
-    $('#compartir').on('click', function () {
-        if ($('#idFileToOptions').text() != '') {
-
-        }
-    })
-    function copyToClipboard(element) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(element).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-    }
-    $('#obtenerLink').on('click', function () {
-        if ($('#idFileToOptions').text() != '') {
-            $.ajax({
-                url: "/File/GetLink?id=" + $('#idFileToOptions').text(),
-                type: "get"
-            }).done(function (res) {
-                $('#lastLink').text(res.m)
-                copyToClipboard('#lastLink')
-                swal({
-                    title: "Completado",
-                    text: "El link fue copiado al portapapeles",
-                    icon: "success",
-                    button: "Ok"
-                })
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText)
-                swal({
-                    title: "Error al cargar la página",
-                    text: "La operacion no se pudo realizar",
-                    icon: "error",
-                    button: "Ok"
-                })
-            })
-        }
-    })
 </script> 

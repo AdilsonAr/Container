@@ -15,19 +15,9 @@
           <Property Name="nombre_bucket" Type="varchar" MaxLength="50" />
           <Property Name="id_autor" Type="int" />
           <Property Name="clave_archivo" Type="varchar" MaxLength="50" />
-          <Property Name="fecha" Type="date" />
-          <Property Name="peso_Mb" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="tipo" Type="varchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="avatar_s3">
-          <Key>
-            <PropertyRef Name="id_avatar" />
-          </Key>
-          <Property Name="id_avatar" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nombre_avatar_app" Type="varchar" MaxLength="50" />
-          <Property Name="nombre_archivo_s3" Type="varchar" MaxLength="50" />
-          <Property Name="nombre_bucket" Type="varchar" MaxLength="50" />
-          <Property Name="id_usuario" Type="int" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="peso_bytes" Type="int" />
+          <Property Name="tipo" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="comentario">
           <Key>
@@ -35,7 +25,7 @@
           </Key>
           <Property Name="id_comentario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_referencia" Type="int" />
-          <Property Name="fecha" Type="date" />
+          <Property Name="fecha" Type="datetime" />
           <Property Name="contenido" Type="text" />
           <Property Name="id_usuario" Type="int" />
         </EntityType>
@@ -46,17 +36,18 @@
           <Property Name="id_link" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_referencia" Type="int" />
           <Property Name="id_usuario_creador" Type="int" />
-          <Property Name="tipo" Type="varchar" MaxLength="50" />
           <Property Name="nombre" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="link_nombre">
+        <EntityType Name="link_app">
           <Key>
-            <PropertyRef Name="id_link_nombre" />
+            <PropertyRef Name="id_link_app" />
           </Key>
-          <Property Name="id_link_nombre" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_link_app" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_referencia" Type="int" />
+          <Property Name="id_usuario_creador" Type="int" />
           <Property Name="id_usuario" Type="int" />
-          <Property Name="aceptada" Type="int" />
-          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="aceptada" Type="varchar" MaxLength="2" />
+          <Property Name="nombre_archivo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="referencia">
           <Key>
@@ -64,8 +55,9 @@
           </Key>
           <Property Name="id_referencia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_repositorio" Type="int" />
-          <Property Name="rama" Type="int" />
-          <Property Name="fecha" Type="date" />
+          <Property Name="vers" Type="int" />
+          <Property Name="rama" Type="varchar" MaxLength="50" />
+          <Property Name="fecha" Type="datetime" />
           <Property Name="id_usuario_creador" Type="int" />
           <Property Name="id_archivo" Type="int" />
           <Property Name="clave_archivo" Type="varchar" MaxLength="50" />
@@ -84,19 +76,10 @@
           </Key>
           <Property Name="id_suscripcion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nivel" Type="varchar" MaxLength="50" />
+          <Property Name="id_usuario_creador" Type="int" />
           <Property Name="id_usuario" Type="int" />
           <Property Name="id_repositorio" Type="int" />
-          <Property Name="aceptada" Type="int" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
+          <Property Name="aceptada" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="usuario">
           <Key>
@@ -122,18 +105,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_avatar_s3_usuario">
-          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
-          <End Role="avatar_s3" Type="Self.avatar_s3" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuario">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="avatar_s3">
-              <PropertyRef Name="id_usuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_comentario_referencia">
           <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
           <End Role="comentario" Type="Self.comentario" Multiplicity="*" />
@@ -158,15 +129,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_link_nombre_usuario">
+        <Association Name="fk_link_app_referencia">
+          <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="referencia">
+              <PropertyRef Name="id_referencia" />
+            </Principal>
+            <Dependent Role="link_app">
+              <PropertyRef Name="id_referencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_link_app_usuario">
           <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
-          <End Role="link_nombre" Type="Self.link_nombre" Multiplicity="*" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="usuario">
               <PropertyRef Name="id_usuario" />
             </Principal>
-            <Dependent Role="link_nombre">
+            <Dependent Role="link_app">
               <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_link_app_usuario_creador">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="link_app">
+              <PropertyRef Name="id_usuario_creador" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -254,24 +249,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_suscripcion_usuario_creador">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="suscripcion" Type="Self.suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="suscripcion">
+              <PropertyRef Name="id_usuario_creador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ContainerModelStoreContainer">
           <EntitySet Name="archivo_s3" EntityType="Self.archivo_s3" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="avatar_s3" EntityType="Self.avatar_s3" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comentario" EntityType="Self.comentario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="link" EntityType="Self.link" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="link_nombre" EntityType="Self.link_nombre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="link_app" EntityType="Self.link_app" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="referencia" EntityType="Self.referencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="repositorio" EntityType="Self.repositorio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="suscripcion" EntityType="Self.suscripcion" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
             <End Role="usuario" EntitySet="usuario" />
             <End Role="archivo_s3" EntitySet="archivo_s3" />
-          </AssociationSet>
-          <AssociationSet Name="fk_avatar_s3_usuario" Association="Self.fk_avatar_s3_usuario">
-            <End Role="usuario" EntitySet="usuario" />
-            <End Role="avatar_s3" EntitySet="avatar_s3" />
           </AssociationSet>
           <AssociationSet Name="fk_comentario_referencia" Association="Self.fk_comentario_referencia">
             <End Role="referencia" EntitySet="referencia" />
@@ -281,9 +282,17 @@
             <End Role="usuario" EntitySet="usuario" />
             <End Role="comentario" EntitySet="comentario" />
           </AssociationSet>
-          <AssociationSet Name="fk_link_nombre_usuario" Association="Self.fk_link_nombre_usuario">
+          <AssociationSet Name="fk_link_app_referencia" Association="Self.fk_link_app_referencia">
+            <End Role="referencia" EntitySet="referencia" />
+            <End Role="link_app" EntitySet="link_app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_link_app_usuario" Association="Self.fk_link_app_usuario">
             <End Role="usuario" EntitySet="usuario" />
-            <End Role="link_nombre" EntitySet="link_nombre" />
+            <End Role="link_app" EntitySet="link_app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_link_app_usuario_creador" Association="Self.fk_link_app_usuario_creador">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="link_app" EntitySet="link_app" />
           </AssociationSet>
           <AssociationSet Name="fk_link_referencia" Association="Self.fk_link_referencia">
             <End Role="referencia" EntitySet="referencia" />
@@ -313,6 +322,10 @@
             <End Role="usuario" EntitySet="usuario" />
             <End Role="suscripcion" EntitySet="suscripcion" />
           </AssociationSet>
+          <AssociationSet Name="fk_suscripcion_usuario_creador" Association="Self.fk_suscripcion_usuario_creador">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="suscripcion" EntitySet="suscripcion" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -329,22 +342,11 @@
           <Property Name="nombre_bucket" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="id_autor" Type="Int32" />
           <Property Name="clave_archivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="fecha" Type="DateTime" Precision="0" />
-          <Property Name="peso_Mb" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="peso_bytes" Type="Int32" />
+          <Property Name="tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="usuario" Relationship="Self.fk_archivo_s3_usuario" FromRole="archivo_s3" ToRole="usuario" />
           <NavigationProperty Name="referencia" Relationship="Self.fk_referencia_archivo" FromRole="archivo_s3" ToRole="referencia" />
-        </EntityType>
-        <EntityType Name="avatar_s3">
-          <Key>
-            <PropertyRef Name="id_avatar" />
-          </Key>
-          <Property Name="id_avatar" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombre_avatar_app" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="nombre_archivo_s3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="nombre_bucket" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="id_usuario" Type="Int32" />
-          <NavigationProperty Name="usuario" Relationship="Self.fk_avatar_s3_usuario" FromRole="avatar_s3" ToRole="usuario" />
         </EntityType>
         <EntityType Name="comentario">
           <Key>
@@ -352,7 +354,7 @@
           </Key>
           <Property Name="id_comentario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_referencia" Type="Int32" />
-          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
           <Property Name="contenido" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="id_usuario" Type="Int32" />
           <NavigationProperty Name="referencia" Relationship="Self.fk_comentario_referencia" FromRole="comentario" ToRole="referencia" />
@@ -365,20 +367,23 @@
           <Property Name="id_link" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_referencia" Type="Int32" />
           <Property Name="id_usuario_creador" Type="Int32" />
-          <Property Name="tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="referencia" Relationship="Self.fk_link_referencia" FromRole="link" ToRole="referencia" />
           <NavigationProperty Name="usuario" Relationship="Self.fk_link_usuario" FromRole="link" ToRole="usuario" />
         </EntityType>
-        <EntityType Name="link_nombre">
+        <EntityType Name="link_app">
           <Key>
-            <PropertyRef Name="id_link_nombre" />
+            <PropertyRef Name="id_link_app" />
           </Key>
-          <Property Name="id_link_nombre" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_link_app" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_referencia" Type="Int32" />
+          <Property Name="id_usuario_creador" Type="Int32" />
           <Property Name="id_usuario" Type="Int32" />
-          <Property Name="aceptada" Type="Int32" />
-          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="usuario" Relationship="Self.fk_link_nombre_usuario" FromRole="link_nombre" ToRole="usuario" />
+          <Property Name="aceptada" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_archivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="referencia" Relationship="Self.fk_link_app_referencia" FromRole="link_app" ToRole="referencia" />
+          <NavigationProperty Name="usuario" Relationship="Self.fk_link_app_usuario" FromRole="link_app" ToRole="usuario" />
+          <NavigationProperty Name="usuario1" Relationship="Self.fk_link_app_usuario_creador" FromRole="link_app" ToRole="usuario" />
         </EntityType>
         <EntityType Name="referencia">
           <Key>
@@ -386,14 +391,16 @@
           </Key>
           <Property Name="id_referencia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_repositorio" Type="Int32" />
-          <Property Name="rama" Type="Int32" />
-          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <Property Name="vers" Type="Int32" />
+          <Property Name="rama" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
           <Property Name="id_usuario_creador" Type="Int32" />
           <Property Name="id_archivo" Type="Int32" />
           <Property Name="clave_archivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="archivo_s3" Relationship="Self.fk_referencia_archivo" FromRole="referencia" ToRole="archivo_s3" />
           <NavigationProperty Name="comentario" Relationship="Self.fk_comentario_referencia" FromRole="referencia" ToRole="comentario" />
           <NavigationProperty Name="link" Relationship="Self.fk_link_referencia" FromRole="referencia" ToRole="link" />
+          <NavigationProperty Name="link_app" Relationship="Self.fk_link_app_referencia" FromRole="referencia" ToRole="link_app" />
           <NavigationProperty Name="repositorio" Relationship="Self.fk_referencia_repositorio" FromRole="referencia" ToRole="repositorio" />
           <NavigationProperty Name="usuario" Relationship="Self.fk_referencia_usuario" FromRole="referencia" ToRole="usuario" />
         </EntityType>
@@ -413,21 +420,13 @@
           </Key>
           <Property Name="id_suscripcion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nivel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_usuario_creador" Type="Int32" />
           <Property Name="id_usuario" Type="Int32" />
           <Property Name="id_repositorio" Type="Int32" />
-          <Property Name="aceptada" Type="Int32" />
+          <Property Name="aceptada" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="repositorio" Relationship="Self.fk_suscripcion_repositorio" FromRole="suscripcion" ToRole="repositorio" />
           <NavigationProperty Name="usuario" Relationship="Self.fk_suscripcion_usuario" FromRole="suscripcion" ToRole="usuario" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="usuario1" Relationship="Self.fk_suscripcion_usuario_creador" FromRole="suscripcion" ToRole="usuario" />
         </EntityType>
         <EntityType Name="usuario">
           <Key>
@@ -441,12 +440,13 @@
           <Property Name="nivel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="archivo_s3" Relationship="Self.fk_archivo_s3_usuario" FromRole="usuario" ToRole="archivo_s3" />
-          <NavigationProperty Name="avatar_s3" Relationship="Self.fk_avatar_s3_usuario" FromRole="usuario" ToRole="avatar_s3" />
           <NavigationProperty Name="comentario" Relationship="Self.fk_comentario_usuario" FromRole="usuario" ToRole="comentario" />
           <NavigationProperty Name="link" Relationship="Self.fk_link_usuario" FromRole="usuario" ToRole="link" />
-          <NavigationProperty Name="link_nombre" Relationship="Self.fk_link_nombre_usuario" FromRole="usuario" ToRole="link_nombre" />
+          <NavigationProperty Name="link_app" Relationship="Self.fk_link_app_usuario" FromRole="usuario" ToRole="link_app" />
+          <NavigationProperty Name="link_app1" Relationship="Self.fk_link_app_usuario_creador" FromRole="usuario" ToRole="link_app" />
           <NavigationProperty Name="referencia" Relationship="Self.fk_referencia_usuario" FromRole="usuario" ToRole="referencia" />
           <NavigationProperty Name="suscripcion" Relationship="Self.fk_suscripcion_usuario" FromRole="usuario" ToRole="suscripcion" />
+          <NavigationProperty Name="suscripcion1" Relationship="Self.fk_suscripcion_usuario_creador" FromRole="usuario" ToRole="suscripcion" />
         </EntityType>
         <Association Name="fk_archivo_s3_usuario">
           <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
@@ -472,18 +472,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_avatar_s3_usuario">
-          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
-          <End Role="avatar_s3" Type="Self.avatar_s3" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuario">
-              <PropertyRef Name="id_usuario" />
-            </Principal>
-            <Dependent Role="avatar_s3">
-              <PropertyRef Name="id_usuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_comentario_referencia">
           <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
           <End Role="comentario" Type="Self.comentario" Multiplicity="*" />
@@ -532,15 +520,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_link_nombre_usuario">
+        <Association Name="fk_link_app_referencia">
+          <End Role="referencia" Type="Self.referencia" Multiplicity="0..1" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="referencia">
+              <PropertyRef Name="id_referencia" />
+            </Principal>
+            <Dependent Role="link_app">
+              <PropertyRef Name="id_referencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_link_app_usuario">
           <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
-          <End Role="link_nombre" Type="Self.link_nombre" Multiplicity="*" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="usuario">
               <PropertyRef Name="id_usuario" />
             </Principal>
-            <Dependent Role="link_nombre">
+            <Dependent Role="link_app">
               <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_link_app_usuario_creador">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="link_app" Type="Self.link_app" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="link_app">
+              <PropertyRef Name="id_usuario_creador" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -592,16 +604,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_suscripcion_usuario_creador">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="suscripcion" Type="Self.suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="suscripcion">
+              <PropertyRef Name="id_usuario_creador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ContainerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="archivo_s3" EntityType="Self.archivo_s3" />
-          <EntitySet Name="avatar_s3" EntityType="Self.avatar_s3" />
           <EntitySet Name="comentario" EntityType="Self.comentario" />
           <EntitySet Name="link" EntityType="Self.link" />
-          <EntitySet Name="link_nombre" EntityType="Self.link_nombre" />
+          <EntitySet Name="link_app" EntityType="Self.link_app" />
           <EntitySet Name="referencia" EntityType="Self.referencia" />
           <EntitySet Name="repositorio" EntityType="Self.repositorio" />
           <EntitySet Name="suscripcion" EntityType="Self.suscripcion" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="usuario" EntityType="Self.usuario" />
           <AssociationSet Name="fk_archivo_s3_usuario" Association="Self.fk_archivo_s3_usuario">
             <End Role="usuario" EntitySet="usuario" />
@@ -610,10 +632,6 @@
           <AssociationSet Name="fk_referencia_archivo" Association="Self.fk_referencia_archivo">
             <End Role="archivo_s3" EntitySet="archivo_s3" />
             <End Role="referencia" EntitySet="referencia" />
-          </AssociationSet>
-          <AssociationSet Name="fk_avatar_s3_usuario" Association="Self.fk_avatar_s3_usuario">
-            <End Role="usuario" EntitySet="usuario" />
-            <End Role="avatar_s3" EntitySet="avatar_s3" />
           </AssociationSet>
           <AssociationSet Name="fk_comentario_referencia" Association="Self.fk_comentario_referencia">
             <End Role="referencia" EntitySet="referencia" />
@@ -631,9 +649,17 @@
             <End Role="usuario" EntitySet="usuario" />
             <End Role="link" EntitySet="link" />
           </AssociationSet>
-          <AssociationSet Name="fk_link_nombre_usuario" Association="Self.fk_link_nombre_usuario">
+          <AssociationSet Name="fk_link_app_referencia" Association="Self.fk_link_app_referencia">
+            <End Role="referencia" EntitySet="referencia" />
+            <End Role="link_app" EntitySet="link_app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_link_app_usuario" Association="Self.fk_link_app_usuario">
             <End Role="usuario" EntitySet="usuario" />
-            <End Role="link_nombre" EntitySet="link_nombre" />
+            <End Role="link_app" EntitySet="link_app" />
+          </AssociationSet>
+          <AssociationSet Name="fk_link_app_usuario_creador" Association="Self.fk_link_app_usuario_creador">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="link_app" EntitySet="link_app" />
           </AssociationSet>
           <AssociationSet Name="fk_referencia_repositorio" Association="Self.fk_referencia_repositorio">
             <End Role="repositorio" EntitySet="repositorio" />
@@ -648,6 +674,10 @@
             <End Role="suscripcion" EntitySet="suscripcion" />
           </AssociationSet>
           <AssociationSet Name="fk_suscripcion_usuario" Association="Self.fk_suscripcion_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="suscripcion" EntitySet="suscripcion" />
+          </AssociationSet>
+          <AssociationSet Name="fk_suscripcion_usuario_creador" Association="Self.fk_suscripcion_usuario_creador">
             <End Role="usuario" EntitySet="usuario" />
             <End Role="suscripcion" EntitySet="suscripcion" />
           </AssociationSet>
@@ -668,19 +698,8 @@
                 <ScalarProperty Name="id_autor" ColumnName="id_autor" />
                 <ScalarProperty Name="clave_archivo" ColumnName="clave_archivo" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
-                <ScalarProperty Name="peso_Mb" ColumnName="peso_Mb" />
+                <ScalarProperty Name="peso_bytes" ColumnName="peso_bytes" />
                 <ScalarProperty Name="tipo" ColumnName="tipo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="avatar_s3">
-            <EntityTypeMapping TypeName="ContainerModel.avatar_s3">
-              <MappingFragment StoreEntitySet="avatar_s3">
-                <ScalarProperty Name="id_avatar" ColumnName="id_avatar" />
-                <ScalarProperty Name="nombre_avatar_app" ColumnName="nombre_avatar_app" />
-                <ScalarProperty Name="nombre_archivo_s3" ColumnName="nombre_archivo_s3" />
-                <ScalarProperty Name="nombre_bucket" ColumnName="nombre_bucket" />
-                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -701,18 +720,19 @@
                 <ScalarProperty Name="id_link" ColumnName="id_link" />
                 <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
                 <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="link_nombre">
-            <EntityTypeMapping TypeName="ContainerModel.link_nombre">
-              <MappingFragment StoreEntitySet="link_nombre">
-                <ScalarProperty Name="id_link_nombre" ColumnName="id_link_nombre" />
+          <EntitySetMapping Name="link_app">
+            <EntityTypeMapping TypeName="ContainerModel.link_app">
+              <MappingFragment StoreEntitySet="link_app">
+                <ScalarProperty Name="id_link_app" ColumnName="id_link_app" />
+                <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
+                <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="aceptada" ColumnName="aceptada" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="nombre_archivo" ColumnName="nombre_archivo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -721,6 +741,7 @@
               <MappingFragment StoreEntitySet="referencia">
                 <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
                 <ScalarProperty Name="id_repositorio" ColumnName="id_repositorio" />
+                <ScalarProperty Name="vers" ColumnName="vers" />
                 <ScalarProperty Name="rama" ColumnName="rama" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
                 <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
@@ -743,20 +764,10 @@
               <MappingFragment StoreEntitySet="suscripcion">
                 <ScalarProperty Name="id_suscripcion" ColumnName="id_suscripcion" />
                 <ScalarProperty Name="nivel" ColumnName="nivel" />
+                <ScalarProperty Name="id_usuario_creador" ColumnName="id_usuario_creador" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="id_repositorio" ColumnName="id_repositorio" />
                 <ScalarProperty Name="aceptada" ColumnName="aceptada" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="ContainerModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

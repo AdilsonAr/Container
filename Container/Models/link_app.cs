@@ -12,13 +12,17 @@ namespace Container.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class link_nombre
+    public partial class link_app
     {
-        public int id_link_nombre { get; set; }
+        public int id_link_app { get; set; }
+        public Nullable<int> id_referencia { get; set; }
+        public Nullable<int> id_usuario_creador { get; set; }
         public Nullable<int> id_usuario { get; set; }
-        public Nullable<int> aceptada { get; set; }
-        public string nombre { get; set; }
+        public string aceptada { get; set; }
+        public string nombre_archivo { get; set; }
     
+        public virtual referencia referencia { get; set; }
         public virtual usuario usuario { get; set; }
+        public virtual usuario usuario1 { get; set; }
     }
 }

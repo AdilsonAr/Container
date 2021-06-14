@@ -17,7 +17,6 @@ namespace Container.Models
         public int id_link { get; set; }
         public Nullable<int> id_referencia { get; set; }
         public Nullable<int> id_usuario_creador { get; set; }
-        public string tipo { get; set; }
         public string nombre { get; set; }
     
         public virtual referencia referencia { get; set; }

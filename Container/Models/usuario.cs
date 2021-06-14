@@ -18,12 +18,13 @@ namespace Container.Models
         public usuario()
         {
             this.archivo_s3 = new HashSet<archivo_s3>();
-            this.avatar_s3 = new HashSet<avatar_s3>();
             this.comentario = new HashSet<comentario>();
             this.link = new HashSet<link>();
-            this.link_nombre = new HashSet<link_nombre>();
+            this.link_app = new HashSet<link_app>();
+            this.link_app1 = new HashSet<link_app>();
             this.referencia = new HashSet<referencia>();
             this.suscripcion = new HashSet<suscripcion>();
+            this.suscripcion1 = new HashSet<suscripcion>();
         }
     
         public int id_usuario { get; set; }
@@ -37,17 +38,20 @@ namespace Container.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<archivo_s3> archivo_s3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<avatar_s3> avatar_s3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<comentario> comentario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<link> link { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<link_nombre> link_nombre { get; set; }
+        public virtual ICollection<link_app> link_app { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<link_app> link_app1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<referencia> referencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<suscripcion> suscripcion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<suscripcion> suscripcion1 { get; set; }
+
         public usuario(string nombre, string apellido, string usuario1, string correo, string nivel, string clave)
         {
             this.nombres = nombre;

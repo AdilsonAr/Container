@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+<ul>
+    @foreach (Container.Dto.ComentarioDto c in ViewBag.comentarios)
+    {
+    <li>
+        <div>@c.user</div><br />
+        <div>
+            @c.contenido
+        </div>
+        @if (c.id_user == (int)Session["userIdS"]) {
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-item" href="#">
+                    <button id="@c.id" class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </li>
+    }
+</ul>
+
+<script>
+    
+</script>

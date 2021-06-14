@@ -16,11 +16,13 @@ namespace Container.Models
     {
         public int id_suscripcion { get; set; }
         public string nivel { get; set; }
+        public Nullable<int> id_usuario_creador { get; set; }
         public Nullable<int> id_usuario { get; set; }
         public Nullable<int> id_repositorio { get; set; }
-        public Nullable<int> aceptada { get; set; }
+        public string aceptada { get; set; }
     
         public virtual repositorio repositorio { get; set; }
         public virtual usuario usuario { get; set; }
+        public virtual usuario usuario1 { get; set; }
     }
 }
