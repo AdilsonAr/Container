@@ -1,15 +1,12 @@
 ﻿@{
     Layout = null;
 }
+
+@if (ViewBag.invitaciones.Count == 0)
+{
+    <div class="alert alert-danger my-2" role="alert">Parece que no tienes nuevas invitaciones</div>
+}
 <ul>
-    @foreach (Container.Dto.Link_appDto c in ViewBag.notificaciones)
-    {
-        <li id="@c.id_elemento">
-            <p>@c.mensaje</p>
-            <button class="btn btn-info" id="linkAceptar">Aceptar</button>
-            <button class="btn btn-danger" id="linkRechazar">Rechazar</button>
-        </li>
-    }
 
     @foreach (Container.Dto.SuscripcionDto c in ViewBag.invitaciones)
     {
@@ -22,58 +19,8 @@
 </ul>
 <script>
     function updateNot() {
-
+        loadPage('/Notificacion/Notificaciones', '#notifiList')
     }
-    $('#linkAceptar').on('click', function () {
-        var element_id = $(this).closest('li').attr('id')
-
-        $.ajax({
-            type: 'post',
-            url: '/Notificacion/AceptarLink?id=' + element_id,
-        }).done(function (respuesta, textStatus, xhr) {
-            swal({
-                title: "Completado",
-                text: "Accion registrada",
-                icon: "success",
-                button: "Ok"
-            })
-            updateNot()
-        })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                swal({
-                    title: "Error",
-                    text: "La operacion no se pudo realizar",
-                    icon: "error",
-                    button: "Ok"
-                })
-
-            })
-    })
-
-    $('#linkRechazar').on('click', function () {
-        var element_id = $(this).closest('li').attr('id')
-        $.ajax({
-            type: 'post',
-            url: '/Notificacion/EliminarLink?id=' + element_id,
-        }).done(function (respuesta, textStatus, xhr) {
-            swal({
-                title: "Completado",
-                text: "Accion registrada",
-                icon: "success",
-                button: "Ok"
-            })
-            updateNot()
-        })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                swal({
-                    title: "Error",
-                    text: "La operacion no se pudo realizar",
-                    icon: "error",
-                    button: "Ok"
-                })
-
-            })
-    })
 
     $('#suscripcionAceptar').on('click', function () {
         var element_id = $(this).closest('li').attr('id')

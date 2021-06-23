@@ -2,50 +2,173 @@
     Layout = null;
 }
 
-<ul>
-    @foreach (Container.Dto.Archivo_s3_ResponseDto c in ViewBag.files)
-    {
-        <li>
-            <div class="fileObject" id="@c.rama">
-                @c.nombre
-            </div>
-        </li>
-    }
-</ul>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UploadModal">
-    Nuevo
-</button>
-
-<div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="upload" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="upload">Carga de un nuevo archivo a @ViewBag.repoName</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/File/UploadFile" enctype="multipart/form-data" method="post" id="frmFile">
-                    <h3>Seleccione el archivo</h3>
-                    <input type="file" name="file" id="file" />
-                    <div id="errMessage" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
-                    <div class="progress my-2" style="display:none;" id="progressBar">
-                        <div class="progress-bar progress-bar-animated progress-bar-striped active" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="width:0%">
-                            0%
-                        </div>
+<div class="row">
+    <div class="col-6" bg-success rounded>
+        
+        <ul>
+            @foreach (Container.Dto.Archivo_s3_ResponseDto c in ViewBag.files)
+            {
+                <li>
+                    <div class="fileObject" id="@c.rama">
+                        @c.nombre
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="nuevoAr">Subir archivo</button>
+                </li>
+            }
+        </ul>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UploadModal">
+            Nuevo
+        </button>
+
+        <div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="upload" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="upload">Carga de un nuevo archivo a @ViewBag.repoName</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/File/UploadFile" enctype="multipart/form-data" method="post" id="frmFile">
+                            <h3>Seleccione el archivo</h3>
+                            <input type="file" name="file" id="file" />
+                            <div id="errMessage" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
+                            <div class="progress my-2" style="display:none;" id="progressBar">
+                                <div class="progress-bar progress-bar-animated progress-bar-striped active" role="progressbar"
+                                     aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                    0%
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="nuevoAr">Subir archivo</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+    </div>
+
+    <div class="col-6 bg-primary rounded">
+        <h5>Participantes</h5>
+        <div id="participantes">
+            <ul>
+                @foreach (Container.Dto.ParticipanteDto c in ViewBag.participantes)
+                {
+                    <li>
+                        @c.user
+                        @if (ViewBag.sus.Equals("admin") && ViewBag.tipo.Equals("grupo"))
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ...
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <button class="delParticipante btn btn-danger" id="@c.id_ref">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+        @if (ViewBag.tipo.Equals("grupo"))
+        {
+            <button class="btn btn-primary" data-toggle="modal" data-target="#nuevoParticipanteModal">
+                Nuevo
+            </button>
+
+            <div class="modal fade" id="nuevoParticipanteModal" tabindex="-1" role="dialog" aria-labelledby="nuevo" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="upload">Nuevo participante del repositorio</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/File/AddParticipante" method="get" id="frmParticipante">
+                                <input type="text" name="nombre" placeholder="nombre" id="nombreParVal" />
+                            </form>
+                            <div id="errMessage3" class="alert alert-danger my-2" role="alert">Este campo no puede estar vacio</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="nuevoParticipante">Invitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
+
 <script>
+
+    $('.delParticipante').on('click', function () {
+
+        $.ajax({
+            url: "/File/DeleteParticipante?id_ref=" + this.id,
+            type: "get"
+        }).done(function (res) {
+            loadPage("/File/FileList?id_repo=" + $('#idCurrentRepo').text(), '#fileList')
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText)
+            swal({
+                title: "Error al cargar la página",
+                text: "La operacion no se pudo realizar",
+                icon: "error",
+                button: "Ok"
+            })
+        })
+
+    })
+
+    $('#nuevoParticipante').on('click', function () {
+        if ($('#nombreParVal').val() == '') {
+            $('#errMessage3').show()
+        } else {
+            $.ajax({
+                url: '/File/AddParticipante?nombre=' + $('#nombreParVal').val() + '&id_repo=' + $('#idCurrentRepo').text(),
+                type: "get"
+            }).done(function (response) {
+                $('#nuevoParticipanteModal').modal('hide')
+                $(".modal-backdrop").remove();
+                swal({
+                    title: "Completado",
+                    text: "La invitacion ha sido enviada",
+                    icon: "success",
+                    button: "Ok"
+                })
+
+                //update
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                //alert(jqXHR.responseText)
+                $('#nuevoParticipanteModal').modal('hide')
+                swal({
+                    title: "Error",
+                    text: "La operacion no se pudo realizar, compruebe que el nombre sea correcto",
+                    icon: "error",
+                    button: "Ok"
+                })
+            })
+        }
+
+    })
+
+    $('#nuevoParticipanteModal').on('show.bs.modal', function (e) {
+        $('#errMessage3').hide()
+    })
+
+    $('#nuevoParticipanteModal').on('hidden.bs.modal', function (e) {
+        $('#frmParticipante')[0].reset();
+    })
+
     $('#nuevoAr').on("click", function () {
         if ($('#file').get(0).files.length === 0) {
             $('#errMessage').show()

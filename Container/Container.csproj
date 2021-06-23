@@ -145,16 +145,19 @@
     <Compile Include="Dto\Archivo_s3_ResponseDto.cs" />
     <Compile Include="Dto\ComentarioDto.cs" />
     <Compile Include="Dto\DetailsFileDto.cs" />
+    <Compile Include="Dto\LinkAppDto.cs" />
     <Compile Include="Dto\LinkDto.cs" />
-    <Compile Include="Dto\Link_appDto.cs" />
+    <Compile Include="Dto\Link_notificacionDto.cs" />
     <Compile Include="Dto\loginDto.cs" />
+    <Compile Include="Dto\ParticipanteDto.cs" />
     <Compile Include="Dto\ReferenciaDto.cs" />
     <Compile Include="Dto\RepoResponseDto.cs" />
     <Compile Include="Dto\Response.cs" />
     <Compile Include="Dto\SuscripcionDto.cs" />
     <Compile Include="Dto\usuarioDto.cs" />
     <Compile Include="Dto\VersionDto.cs" />
-    <Compile Include="FileRepository\FileRepo.cs" />
+    <Compile Include="Service\AccesoService.cs" />
+    <Compile Include="Service\FileService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

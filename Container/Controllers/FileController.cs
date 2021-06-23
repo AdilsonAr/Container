@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Container.FileRepository;
+using Container.Service;
 using System.Threading.Tasks;
 using Container.Models;
 using Container.Dto;
 using System.IO;
 using Amazon.S3.Transfer;
+using Container.Service;
 
 namespace Container.Controllers
 {
     public class FileController : Controller
     {
-        FileRepo repo = new FileRepo();
+        FileService repo = new FileService();
         string bucket = "ar-container-bucket";
 
         public ActionResult RepoConf(int id_repo)
@@ -199,6 +200,52 @@ namespace Container.Controllers
             }
         }
 
+        public JsonResult Delete(int id_referencia)
+        {
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null)
+            {
+                Response.StatusCode = 401;
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                ContainerEntities db = new ContainerEntities();
+                int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
+                suscripcion actualSuscripcion =AccesoService.hasAccessWithSuscripcion(id_referencia, idUsuario);
+
+                referencia r = db.referencia.Where(y => y.id_referencia == id_referencia).FirstOrDefault();
+                archivo_s3 ar = db.archivo_s3.Where(x => x.id_archivo == r.id_archivo).FirstOrDefault();
+
+                if (actualSuscripcion!=null &&(r.id_usuario_creador == idUsuario || actualSuscripcion.nivel.Equals("admin")))
+                {
+                    string rama = r.rama;
+                    int repo = r.id_repositorio.Value;
+                    List<comentario> recomentarios = db.comentario.Where(x => x.id_referencia == r.id_referencia).ToList();
+                    List<link> relinks = db.link.Where(x => x.id_referencia == r.id_referencia).ToList();
+                    foreach(comentario c in recomentarios)
+                    {
+                        db.comentario.Remove(c);
+                        db.SaveChanges();
+                    }
+
+                    foreach (link c in relinks)
+                    {
+                        db.link.Remove(c);
+                        db.SaveChanges();
+                    }
+                    db.referencia.Remove(r);
+                    db.SaveChanges();
+                    
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
         public ActionResult FileList(int id_repo)
         {
             if (System.Web.HttpContext.Current.Session["usernameS"] == null) { Response.StatusCode = 401; }
@@ -207,9 +254,9 @@ namespace Container.Controllers
                 int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
 
                 ContainerEntities db = new ContainerEntities();
-                repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).First();
+                repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).FirstOrDefault();
                 suscripcion sus = db.suscripcion.Where(x => x.id_repositorio == id_repo
-                     && x.id_usuario == idUsuario && x.aceptada.Equals("si")).First();
+                     && x.id_usuario == idUsuario && x.aceptada.Equals("si")).FirstOrDefault();
                 if (repo == null || sus == null)
                 {
                     Response.StatusCode = 400;
@@ -219,6 +266,17 @@ namespace Container.Controllers
                     List<Archivo_s3_ResponseDto> archDto = new List<Archivo_s3_ResponseDto>();
                     //unicamente las versiones 1
                     List<referencia> refer = repo.referencia.Where(x=>x.vers==1).ToList();
+                    //ramas con version 1
+                    HashSet<string> ramas = refer.Select(x => x.rama).ToHashSet();
+                    //raamssin version 1
+                    List<referencia> referOrdenada = repo.referencia.Where(x => x.vers != 1).OrderBy(x=>x.vers).ToList();
+                    foreach(referencia c in referOrdenada)
+                    {
+                        if (!ramas.Contains(c.rama))
+                        {
+                            refer.Add(c);
+                        }
+                    }
                     foreach (referencia c in refer)
                     {
                         Archivo_s3_ResponseDto arch = new Archivo_s3_ResponseDto();
@@ -226,13 +284,77 @@ namespace Container.Controllers
                         arch.rama = c.rama;
                         archDto.Add(arch);
                     }
+                    List<ParticipanteDto> participantes = new List<ParticipanteDto>();
+                    List<suscripcion> suscripcionenAc = db.suscripcion.Where(x => x.id_repositorio == id_repo).ToList();
+                    foreach (suscripcion c in suscripcionenAc)
+                    {
+                        ParticipanteDto par = new ParticipanteDto();
+                        par.id_ref = c.id_suscripcion;
+                        par.user = c.usuario.usuario1;
+                        participantes.Add(par);
+                    }
+                    ViewBag.sus = sus.nivel;
+                    ViewBag.tipo = repo.tipo;
                     ViewBag.files = archDto;
                     ViewBag.repo = id_repo;
+                    ViewBag.participantes = participantes;
                     ViewBag.repoName = repo.nombre;
                 }
             }
             
             return View();
+        }
+
+        public JsonResult AddParticipante(string nombre, int id_repo)
+        {
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null) { 
+                Response.StatusCode = 401;
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
+
+            ContainerEntities db = new ContainerEntities();
+            usuario adding = db.usuario.Where(x => x.usuario1.Equals(nombre)).FirstOrDefault();
+            repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).FirstOrDefault();
+            suscripcion sus = db.suscripcion.Where(x => x.id_repositorio == id_repo
+                 && x.id_usuario == idUsuario && x.aceptada.Equals("si")).FirstOrDefault();
+            if (repo == null || sus == null || adding == null)
+            {
+                Response.StatusCode = 400;
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            suscripcion creating = new suscripcion();
+            creating.id_repositorio = repo.id_repositorio;
+            creating.id_usuario = adding.id_usuario;
+            creating.id_usuario_creador = idUsuario;
+            creating.nivel = "invitado";
+            creating.aceptada = "no";
+            db.suscripcion.Add(creating);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteParticipante(int id_ref)
+        {
+            if (System.Web.HttpContext.Current.Session["usernameS"] == null)
+            {
+                Response.StatusCode = 401;
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
+
+            ContainerEntities db = new ContainerEntities();
+            suscripcion del = db.suscripcion.Where(x => x.id_suscripcion == id_ref).FirstOrDefault();
+            
+            if (del == null || idUsuario!=del.id_usuario_creador)
+            {
+                Response.StatusCode = 400;
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            
+            db.suscripcion.Remove(del);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Versiones(int id_repo, string rama)
@@ -246,7 +368,6 @@ namespace Container.Controllers
                 repositorio repo = db.repositorio.Where(x => x.id_repositorio == id_repo).First();
                 suscripcion sus = db.suscripcion.Where(x => x.id_repositorio == id_repo
                      && x.id_usuario == idUsuario && x.aceptada.Equals("si")).First();
-                string nivel = sus.nivel;
                 List<referencia> refer = repo.referencia.Where(x => x.rama.Equals(rama)).ToList();
                 if (repo == null || sus == null || refer == null)
                 {
@@ -269,7 +390,6 @@ namespace Container.Controllers
                     ViewBag.repo = id_repo;
                     ViewBag.rama = rama;
                     ViewBag.repoName = repo.nombre;
-                    ViewBag.nivel = nivel;
                 }
             }
 

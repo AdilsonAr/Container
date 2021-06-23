@@ -10,3 +10,37 @@
     <li id="fileVersion">Version: @ViewBag.version </li>
     <li id="fileAutor">Autor: @ViewBag.autor </li>
 </ul>
+@if ((ViewBag.nivel).Equals("admin"))
+{
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item" href="#">
+                <button id="fiEliminar" class="btn btn-danger">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $('#fiEliminar').on('click', function () {
+        $.ajax({
+            url: '/File/Delete?id_referencia=' + $('#idFileToOptions').text(),
+            type: "get"
+        }).done(function (res) {
+            loadPage("/File/FileList?id_repo=" + $('#idCurrentRepo').text(), '#fileList')
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText)
+            swal({
+                title: "Error al cargar la página",
+                text: "La operacion no se pudo realizar",
+                icon: "error",
+                button: "Ok"
+            })
+        }) 
+    })
+</script>

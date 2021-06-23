@@ -5,10 +5,9 @@
     <a id="goFile"></a><p id="rama"></p>
 </div>
 <div class="row">
-    <div class="col-4">
+    <div class="col-4 bg-success rounded">
         <div class="row" id="fileOptions" style="display:none;">
             <button class="btn btn-primary" id="descargar">Descargar</button>
-            <button class="btn btn-primary" id="compartir">Compartir</button>
             <button class="btn btn-primary" id="obtenerLink">Obtener link</button>
             <div style="display:none;" id="idFileToOptions"></div>
             <div style="display:none;" id="lastLink"></div>
@@ -25,13 +24,16 @@
         </ul>
         <button class="btn btn-info" data-toggle="modal" data-target="#UploadVersionModal">Nueva version</button>
     </div>
-
-    <div class="col-4">
+    
+    <div class="col-4 bg-primary rounded">
         <div id="fileComentarios"></div>
-        <textarea id="comentario"></textarea><button id="enviarComentario" class="btn btn-success">Enviar</button>
+        <div id="comentarioArea" style="display:none;">
+            <textarea id="comentario"></textarea><button id="enviarComentario" class="btn btn-success">Enviar</button>
+        </div>
+        
     </div>
 
-    <div class="col-4" id="fileDetails">
+    <div class="col-4 bg-warning rounded" id="fileDetails">
         
     </div>
 </div>
@@ -81,7 +83,7 @@
                     icon: "error",
                     button: "Ok"
                 })
-            })
+            }) 
         }
 
     })
@@ -98,6 +100,7 @@
         $('#idFileToOptions').text(this.id)
         loadPage("/Metadatos/FileDetails?id=" + this.id, '#fileDetails')
         loadPage("/Comentario/Comentarios?id_referencia=" + this.id, '#fileComentarios')
+        $('#comentarioArea').show()
     })
 
     $('#descargar').click(function (e) {
@@ -106,11 +109,7 @@
             window.location.href = '/File/Download?id=' + $('#idFileToOptions').text()
         }
     })
-    $('#compartir').on('click', function () {
-        if ($('#idFileToOptions').text() != '') {
-
-        }
-    })
+    
     function copyToClipboard(element) {
         var $temp = $("<input>");
         $("body").append($temp);

@@ -11,7 +11,7 @@
         $('#content').html(info)
     }        
 
-    function loadPage(page) {
+    function loadPageInContent(page) {
     $('#content').hide()
     $.ajax({
         url: page,
@@ -35,6 +35,6 @@
 }
 
     $(document).ready(function () {
-        loadPage("/Home/IndexParcial")
+        loadPageInContent("/Home/IndexParcial")
         })
 </script>

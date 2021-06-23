@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Container.Dto
 {
-    public class Link_appDto
+    public class Link_notificacionDto
     {
         public int id_elemento { get; set; }
         public string mensaje { get; set; }

@@ -1,9 +1,11 @@
 ﻿@{
     Layout = null;
 }
+
 <div style="display:none;" id="idCurrentRepo"></div>
 <div style="display:none;" id="nameCurrentRepo"></div>
 <div style="display:none;" id="nameCurrentVersion"></div>
+
 <ul>
     @foreach (Container.Dto.RepoResponseDto c in ViewBag.repos)
     {

@@ -25,7 +25,18 @@
                             <button class="btn btn-light" id="archivos">Mis archivos</button>
                         </li>
 
-                        <li><p style="color:brown;margin-top:15px">Hola @Session["usernameS"] </p></li>
+                        <li>
+                            <div class="dropdown" id="notiDrop">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Invitaciones
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div id="notifiList"></div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li><p class="pt-2 mx-4">Hola @Session["usernameS"] </p></li>
                     }
                     else
                     {
@@ -52,12 +63,41 @@
         </div>
 
         <script type="text/javascript">
+
+            $('#notiDrop').on('show.bs.dropdown', function () {
+                loadPage('/Notificacion/Notificaciones', '#notifiList')
+            })
+
+            function loadPage(page, where) {
+                $(where).hide()
+                $.ajax({
+                    url: page,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+                })
+                    .done(function (result) {
+                        $(where).html(result)
+                        $(where).show()
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseText)
+                        $(where).show()
+                        swal({
+                            title: "Error al cargar la página",
+                            text: "No se pudo completar la carga del sitio",
+                            icon: "error",
+                            button: "Ok"
+                        })
+                    })
+            }
+
     $("#logIn").on("click", function () {
-    loadPage("/Home/LoginParcial")
+        loadPageInContent("/Home/LoginParcial")
     })
 
     $("#signUp").on("click", function () {
-    loadPage("/Home/SignUpParcial")
+        loadPageInContent("/Home/SignUpParcial")
     })
 
     $("#index").on("click", function () {

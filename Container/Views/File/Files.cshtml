@@ -8,48 +8,22 @@
         height:100%;
     }
 </style>
-<div class="row">
+<div class="row my-4">
     <h2>
         Repositorios y archivos
     </h2>
 </div>
 <div class="row">
-    <div class="col-2 scrollDiv">
+    <div class="col-2 scrollDiv bg-info rounded">
+        <h5>Repositorios</h5>
         <div>
-            <h3>Repositorios</h3>
-            <div id="repoList"></div>
-        </div>
-
-        <div>
-            <h3>Links</h3>
-            <div id="linkList">
-                <table class="table">
-                    <tr>
-                        <td>
-                            <div>
-                                link
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div>
-                                link
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <button>
-                    Nuevo
-                </button>
-            </div>
+            <div id="repoList" class="my-4"></div>
         </div>
     </div>
 
     <div class="col-10 scrollDiv">
-        <div class="row">
-            <div id="fileList"></div>           
-        </div>     
+        <h5>Archivos</h5>
+        <div id="fileList" class="my-4"></div>
     </div>
 </div>
 <script>

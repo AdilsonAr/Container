@@ -10,30 +10,6 @@
     function loadDirect(info) {
         $('#content').html(info)
     }        
-     
-    function loadPage(page, where) {
-    $(where).hide()
-    $.ajax({
-        url: page,
-        contentType: 'application/html; charset=utf-8',
-        type: 'GET',
-        dataType: 'html'
-    })
-        .done(function (result) {
-            $(where).html(result)
-            $(where).show()
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            //alert(jqXHR.responseText)
-            $(where).show()
-            swal({
-                title: "Error al cargar la página",
-                text: "No se pudo completar la carga del sitio",
-                icon: "error",
-                button: "Ok"
-            })
-        })
-}
 
     $(document).ready(function () {
         loadPage("/File/Files", '#content')

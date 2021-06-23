@@ -13,9 +13,9 @@ using System.Configuration;
 using System.IO;
 using System.Web.Mvc;
 
-namespace Container.FileRepository
+namespace Container.Service
 {
-    public class FileRepo
+    public class FileService
     {
         public TransferUtility getUtility()
         {

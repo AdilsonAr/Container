@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Container.FileRepository;
+using Container.Service;
 using System.Threading.Tasks;
 using Container.Models;
 using Container.Dto;
@@ -79,7 +79,7 @@ namespace Container.Controllers
 
         public FileResult DownloadLink(string nombre)
         {
-            FileRepo repo = new FileRepo();
+            FileService repo = new FileService();
             string bucket = "ar-container-bucket";
 
             ContainerEntities db = new ContainerEntities();

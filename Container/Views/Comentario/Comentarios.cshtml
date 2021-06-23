@@ -9,24 +9,38 @@
         <div>
             @c.contenido
         </div>
-        @if (c.id_user == (int)Session["userIdS"]) {
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <div class="dropdown-item" href="#">
-                    <button id="@c.id" class="btn btn-danger">
+        @if (c.id_user == (int)Session["userIdS"])
+        {
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ...
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button id="@c.id" class="coEliminar btn btn-danger">
                         Eliminar
                     </button>
                 </div>
             </div>
-        </div>
         }
     </li>
     }
 </ul>
 
 <script>
-    
+    $('.coEliminar').on('click', function () {
+        $.ajax({
+            url: "/Comentario/DeleteComentario?id_comentario=" + this.id,
+            type: "get"
+        }).done(function (res) {
+            loadPage("/Comentario/Comentarios?id_referencia=" + $('#idFileToOptions').text(), '#fileComentarios')
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            swal({
+                title: "Error al cargar la página",
+                text: "La operacion no se pudo realizar",
+                icon: "error",
+                button: "Ok"
+            })
+        })
+
+    })
 </script>

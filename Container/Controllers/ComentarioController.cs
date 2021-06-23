@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Container.Models;
 using Container.Dto;
+using Container.Service;
 namespace Container.Controllers
 {
     public class ComentarioController : Controller
@@ -19,7 +20,7 @@ namespace Container.Controllers
 
             int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
           
-            if (!hasAccess(id_referencia, idUsuario))
+            if (!AccesoService.hasAccess(id_referencia, idUsuario))
             {
                 Response.StatusCode = 400;
                 return Json(false, JsonRequestBehavior.AllowGet);
@@ -55,19 +56,8 @@ namespace Container.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
             co.contenido = "Comentario eliminado";
-            db.comentario.Add(co);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public bool hasAccess(int id_referencia, int id_usuario) {
-            ContainerEntities db = new ContainerEntities();
-            int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
-            referencia refer = db.referencia.Where(x => x.id_referencia == id_referencia).FirstOrDefault();
-            if (refer == null) return false;
-            suscripcion sus = refer.repositorio.suscripcion.Where(z => z.id_usuario == id_usuario).FirstOrDefault();
-            if (sus == null) return false;
-            return true;
         }
 
         public ActionResult Comentarios(int id_referencia)
@@ -80,7 +70,7 @@ namespace Container.Controllers
 
             int idUsuario = (int)System.Web.HttpContext.Current.Session["userIdS"];
 
-            if (!hasAccess(id_referencia, idUsuario))
+            if (!AccesoService.hasAccess(id_referencia, idUsuario))
             {
                 Response.StatusCode = 400;
                 return Json(false, JsonRequestBehavior.AllowGet);
